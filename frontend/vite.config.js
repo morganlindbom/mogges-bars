@@ -1,7 +1,29 @@
+// filename: vite.config.js
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-// https://vite.dev/config/
+/**
+ * Fix __dirname for ES modules
+ *
+ * Converts import.meta.url to a usable filesystem path
+ * so we can safely use path.resolve.
+ */
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+/**
+ * Vite configuration
+ *
+ * Adds alias '@' pointing to src for cleaner imports.
+ */
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  }
 })
