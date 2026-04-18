@@ -1,0 +1,10 @@
+# filename: .gitignore
+
+node_modules/
+.env
+dist/
+build/
+
+# Ignore specific sensitive file
+secret.txt
+DA219B_Fullstack_Lab.pdf
