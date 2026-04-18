@@ -10,6 +10,4 @@ import "./index.css";
  *
  * Mounts React app into DOM.
  */
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <App />
-);
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
