@@ -15,7 +15,7 @@ function Home() {
   useEffect(() => {
     async function loadBars() {
       try {
-        const res = await fetch("/api/bars");
+        const res = await fetch("http://localhost:3000/api/bars");
 
         if (!res.ok) {
           throw new Error("Failed to fetch bars");
