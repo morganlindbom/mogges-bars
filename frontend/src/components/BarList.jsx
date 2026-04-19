@@ -5,17 +5,17 @@ import BarRow from "@/components/BarRow";
 /**
  * BarList component.
  *
- * Receives list of bars via props and renders them.
+ * Renders list of bars from props.
  */
 function BarList({ bars }) {
 
   /**
-   * Render list of bars.
+   * Render bars.
    */
   return (
     <div>
       {bars.map((bar) => (
-        <BarRow key={bar.id} bar={bar} />
+        <BarRow key={bar._id} bar={bar} />
       ))}
     </div>
   );

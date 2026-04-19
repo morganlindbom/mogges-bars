@@ -15,13 +15,16 @@ function Home() {
   useEffect(() => {
     async function loadBars() {
       try {
-        const res = await fetch("http://localhost:3000/api/bars");
+        const res = await fetch("/api/bars"); // ✔ använd proxy
 
         if (!res.ok) {
           throw new Error("Failed to fetch bars");
         }
 
         const data = await res.json();
+
+        console.log("DATA:", data); // DEBUG
+
         setBars(data);
 
       } catch (error) {
