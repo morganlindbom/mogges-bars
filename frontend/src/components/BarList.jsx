@@ -2,12 +2,16 @@
 
 import BarRow from "@/components/BarRow";
 
-function BarList() {
-  const bars = [
-    { id: 1, name: "Protein Bar", protein: 20 },
-    { id: 2, name: "Energy Bar", protein: 10 },
-  ];
+/**
+ * BarList component.
+ *
+ * Receives list of bars via props and renders them.
+ */
+function BarList({ bars }) {
 
+  /**
+   * Render list of bars.
+   */
   return (
     <div>
       {bars.map((bar) => (

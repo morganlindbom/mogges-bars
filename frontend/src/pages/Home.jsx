@@ -1,5 +1,6 @@
 // filename: src/pages/Home.jsx
 
+import { useEffect, useState } from "react";
 import BarList from "@/components/BarList";
 
 /**
@@ -9,15 +10,32 @@ import BarList from "@/components/BarList";
  */
 function Home() {
 
-  /**
-   * Layout rendering.
-   *
-   * Displays page title and list of bars.
-   */
+  const [bars, setBars] = useState([]);
+
+  useEffect(() => {
+    async function loadBars() {
+      try {
+        const res = await fetch("/api/bars");
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch bars");
+        }
+
+        const data = await res.json();
+        setBars(data);
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadBars();
+  }, []);
+
   return (
     <div>
       <h1>My Bars</h1>
-      <BarList />
+      <BarList bars={bars} />
     </div>
   );
 }
