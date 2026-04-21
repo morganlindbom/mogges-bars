@@ -1,0 +1,31 @@
+// filename: tsconfig.json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "bundler",
+
+    "jsx": "react-jsx",
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    "types": ["vite/client"],
+    "lib": ["ESNext", "DOM"],
+
+    "noEmit": true
+  },
+
+  "include": ["src"]
+}

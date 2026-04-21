@@ -2,6 +2,11 @@
 
 import mongoose from "mongoose";
 
+/**
+ * Ingredient schema
+ *
+ * Defines nutritional values per ingredient.
+ */
 const ingredientSchema = new mongoose.Schema(
   {
     name: {
@@ -10,19 +15,13 @@ const ingredientSchema = new mongoose.Schema(
       trim: true
     },
 
-    density: {
-      type: Number,
-      required: true,
-      min: 0
-    },
-
     calories: {
       type: Number,
       required: true,
       min: 0
     },
 
-    protein: {
+    carbs: {
       type: Number,
       required: true,
       min: 0
@@ -34,7 +33,13 @@ const ingredientSchema = new mongoose.Schema(
       min: 0
     },
 
-    carbs: {
+    protein: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+
+    density: {
       type: Number,
       required: true,
       min: 0
@@ -45,6 +50,9 @@ const ingredientSchema = new mongoose.Schema(
   }
 );
 
+/**
+ * Model creation
+ */
 const Ingredient = mongoose.model("Ingredient", ingredientSchema);
 
 export default Ingredient;

@@ -1,135 +1,122 @@
 // filename: src/controllers/ingredient.controller.js
 
-/**
- * Ingredient controller.
- *
- * Handles HTTP requests for ingredient resources.
- * Delegates data operations to the model layer.
- */
-
 import Ingredient from "#models/ingredient.model";
 
 /**
- * Get all ingredients
+ * Get all ingredients.
  *
- * Returns all ingredients in the system.
+ * Returns all ingredients in the database.
  */
-export async function getIngredients(req, res, next) {
-    try {
-        const ingredients = await Ingredient.find();
-        res.json(ingredients);
-    } catch (err) {
-        next(err);
-    }
+export async function getIngredients(req, res) {
+
+  try {
+    const ingredients = await Ingredient.find();
+
+    res.json(ingredients);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
 
-/**
- * Get single ingredient by ID
- */
-export async function getIngredientById(req, res, next) {
-    try {
-        const { id } = req.params;
-
-        const ingredient = await Ingredient.findById(id);
-
-        if (!ingredient) {
-            return res.status(404).json({ message: "Ingredient not found" });
-        }
-
-        res.json(ingredient);
-    } catch (err) {
-        next(err);
-    }
-}
 
 /**
- * Create ingredient
+ * Get a single ingredient by ID.
  *
- * Uses authenticated user as owner.
+ * Fetches one ingredient document.
  */
-export async function createIngredient(req, res, next) {
-    try {
-        const {
-            name,
-            density,
-            calories,
-            protein,
-            fat,
-            carbs
-        } = req.body;
+export async function getIngredientById(req, res) {
 
-        /**
-         * Basic validation
-         */
-        if (!name || density == null || calories == null || protein == null || fat == null || carbs == null) {
-            return res.status(400).json({
-                message: "Missing required fields"
-            });
-        }
+  try {
+    const ingredient = await Ingredient.findById(req.params.id);
 
-        /**
-         * Create ingredient with ownership
-         */
-        const ingredient = await Ingredient.create({
-            name,
-            density,
-            calories,
-            protein,
-            fat,
-            carbs,
-            createdBy: req.user.id
-        });
-
-        res.status(201).json(ingredient);
-
-    } catch (err) {
-        next(err);
+    if (!ingredient) {
+      return res.status(404).json({ error: "Ingredient not found" });
     }
+
+    res.json(ingredient);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
 
+
 /**
- * Update ingredient
+ * Create a new ingredient.
+ *
+ * Stores nutritional values per 100g.
  */
-export async function updateIngredient(req, res, next) {
-    try {
-        const { id } = req.params;
+export async function createIngredient(req, res) {
 
-        const updated = await Ingredient.findByIdAndUpdate(
-            id,
-            req.body,
-            {
-                new: true,
-                runValidators: true
-            }
-        );
+  try {
+    const { name, calories, carbs, fat, protein, density } = req.body;
 
-        if (!updated) {
-            return res.status(404).json({ message: "Ingredient not found" });
-        }
-
-        res.json(updated);
-
-    } catch (err) {
-        next(err);
+    // Basic validation
+    if (!name) {
+      return res.status(400).json({ error: "Name is required" });
     }
+
+    const newIngredient = await Ingredient.create({
+      name,
+      calories,
+      carbs,
+      fat,
+      protein,
+      density
+    });
+
+    res.status(201).json(newIngredient);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
 
+
 /**
- * Delete ingredient
+ * Update an ingredient.
+ *
+ * Modifies an existing ingredient.
  */
-export async function deleteIngredient(req, res, next) {
-    try {
-        const { id } = req.params;
+export async function updateIngredient(req, res) {
 
-        const deleted = await Ingredient.findByIdAndDelete(id);
+  try {
+    const updated = await Ingredient.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
 
-        if (!deleted) {
-            return res.status(404).json({ message: "Ingredient not found" });
-        }
-
-        res.status(204).send();
-
-    } catch (err) {
-        next(err);
+    if (!updated) {
+      return res.status(404).json({ error: "Ingredient not found" });
     }
+
+    res.json(updated);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+
+/**
+ * Delete an ingredient.
+ *
+ * Removes an ingredient from the database.
+ */
+export async function deleteIngredient(req, res) {
+
+  try {
+    const deleted = await Ingredient.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Ingredient not found" });
+    }
+
+    res.json({ message: "Ingredient deleted" });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }
