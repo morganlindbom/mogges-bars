@@ -1,0 +1,64 @@
+/* filename: src/components/create-bar/IngredientsPanel/IngredientsPanel.module.css */
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inner {
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+}
+
+.search {
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  width: 120px;
+  justify-self: center;
+}
+
+.grid {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.button {
+  padding: 6px 4px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: #f9f9f9;
+  width: 100%;
+  transition: 0.15s;
+}
+
+.button:hover {
+  background: #ccc;
+}
+
+.empty {
+  grid-column: span 2;
+  text-align: center;
+}

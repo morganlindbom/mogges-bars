@@ -1,0 +1,79 @@
+/* filename: src/pages/Home.module.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 15px; /* 🔥 mindre gap */
+  min-height: 0;
+}
+
+/* HERO */
+
+.hero {
+  text-align: center;
+  padding: 5px 0; /* 🔥 mycket mindre */
+}
+
+.title {
+  font-size: 26px; /* 🔥 mindre */
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #666;
+  line-height: 1.4;
+  font-size: 13px; /* 🔥 mindre */
+}
+
+/* GRID */
+
+.grid {
+  flex: 1;
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px; /* 🔥 mindre gap */
+
+  min-height: 0;
+}
+
+/* CARD */
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  padding: 18px; /* 🔥 mindre padding */
+  background: #fff;
+
+  min-height: 130px; /* 🔥 mindre höjd */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 🔥 centrerar innehåll */
+}
+
+/* TEXT */
+
+.cardTitle {
+  font-size: 17px;
+  margin-bottom: 6px;
+  color: var(--text-h);
+}
+
+.cardText {
+  font-size: 12.5px; /* 🔥 mindre */
+  color: #666;
+  line-height: 1.4;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

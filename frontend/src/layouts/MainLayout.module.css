@@ -1,0 +1,31 @@
+/* filename: src/layouts/MainLayout/MainLayout.module.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;              /* 🔥 kopplar till #root (100vh) */
+}
+
+/* MAIN CONTENT AREA */
+.main {
+  flex: 1;                   /* 🔥 fyller mellan navbar + footer */
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;          /* 🔥 stoppar global scroll */
+  min-height: 0;             /* 🔥 KRITISK för flex/grid */
+
+  padding: 10px 0 20px;      /* 🔥 luft top + bottom (fixar footer-krock) */
+}
+
+/* INNER CONTAINER */
+.inner {
+  flex: 1;                   /* 🔥 fyller main */
+  display: flex;
+  flex-direction: column;
+
+  min-height: 0;             /* 🔥 KRITISK */
+  
+  width: 85%;
+  margin: 0 auto;
+}

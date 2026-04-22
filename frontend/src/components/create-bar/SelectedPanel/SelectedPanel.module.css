@@ -1,0 +1,52 @@
+/* filename: src/components/create-bar/SelectedPanel/SelectedPanel.module.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.title {
+  margin: 0 0 10px 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.th {
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 6px;
+  font-size: 13px;
+}
+
+.td {
+  padding: 8px 0;
+  vertical-align: middle;
+}
+
+.input {
+  width: 80px;
+  text-align: right;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button:hover {
+  transform: scale(1.1);
+}
+
+.empty {
+  text-align: center;
+  margin-top: 10px;
+}

@@ -3,7 +3,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+
 import "./index.css";
+import "./App.css";
 
 /**
  * Application bootstrap.
@@ -21,7 +23,12 @@ if (!rootElement) {
   throw new Error("Root element not found");
 }
 
-ReactDOM.createRoot(rootElement).render(
+/**
+ * Create React root and render application.
+ */
+const root = ReactDOM.createRoot(rootElement);
+
+root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>

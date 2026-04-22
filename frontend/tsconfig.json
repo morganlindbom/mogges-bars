@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@create-bar/*": ["src/components/create-bar/*"]
     },
 
     "module": "ESNext",

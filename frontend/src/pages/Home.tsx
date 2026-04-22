@@ -1,34 +1,67 @@
 // filename: src/pages/Home.tsx
 
-import { Link } from "react-router-dom";
+import styles from "./Home.module.css";
 
 /**
  * Home page.
  *
- * Provides introduction and navigation.
+ * Displays overview of system features.
  */
 function Home() {
-
-  /**
-   * Render homepage.
-   */
   return (
-    <div>
-      <h1>My Homepage</h1>
+    <div className={styles.wrapper}>
 
-      <p>
-        This application allows you to create and manage custom nutrition bars.
-        You can analyze nutritional values and build optimized recipes.
-      </p>
+      {/* HERO */}
+      <section className={styles.hero}>
+        <h1 className={styles.title}>
+          Mogges Nutrition Bar App
+        </h1>
 
-      <nav>
-        <ul>
-          <li><Link to="/bars">View Bars</Link></li>
-          <li><Link to="/bars/create">Create Bar</Link></li>
-          <li><Link to="/ingredients">Ingredients</Link></li>
-          <li><Link to="/stats">Statistics</Link></li>
-        </ul>
-      </nav>
+        <p className={styles.subtitle}>
+          Build, analyze, and optimize your own nutrition bars.
+          Control macros, experiment with ingredients, and create
+          the perfect recipe.
+        </p>
+      </section>
+
+      {/* GRID */}
+      <section className={styles.grid}>
+
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Add Ingredient</h3>
+          <p className={styles.cardText}>
+            Create and store new ingredients with nutritional values such as
+            calories, protein, carbohydrates, and fat per 100g. This allows you
+            to build accurate and reusable components for your recipes.
+          </p>
+        </div>
+
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Create Bar</h3>
+          <p className={styles.cardText}>
+            Combine ingredients and define exact weights to construct a custom
+            nutrition bar. The system automatically calculates total and per
+            100g nutritional values.
+          </p>
+        </div>
+
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Ingredients Overview</h3>
+          <p className={styles.cardText}>
+            View and manage all stored ingredients. Update nutritional data,
+            remove outdated entries, and maintain a clean ingredient database.
+          </p>
+        </div>
+
+        <div className={styles.card}>
+          <h3 className={styles.cardTitle}>Statistics</h3>
+          <p className={styles.cardText}>
+            Analyze nutritional distributions and compare different bar
+            compositions using visual charts and aggregated data.
+          </p>
+        </div>
+
+      </section>
     </div>
   );
 }

@@ -1,28 +1,27 @@
-// filename: src/layouts/MainLayout.tsx
+// filename: src/layouts/MainLayout/MainLayout.tsx
 
-import { ReactNode } from "react";
-import Navbar from "@/components/Nav";
+import Navbar from "@/layouts/Navbar";
+import Footer from "@/layouts/Footer";
+import { Outlet } from "react-router-dom";
+import styles from "./MainLayout.module.css";
 
 /**
  * Main layout.
  *
- * Wraps all pages with shared UI (navbar, etc).
+ * Wraps all pages with shared UI.
  */
-type Props = {
-  children: ReactNode;
-};
-
-function MainLayout({ children }: Props) {
-  /**
-   * Layout structure.
-   */
+function MainLayout() {
   return (
-    <div>
+    <div className={styles.wrapper}>
       <Navbar />
 
-      <main style={{ padding: "20px" }}>
-        {children}
+      <main className={styles.main}>
+        <div className={styles.inner}>
+          <Outlet />
+        </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

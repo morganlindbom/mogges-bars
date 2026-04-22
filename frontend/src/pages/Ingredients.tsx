@@ -19,7 +19,7 @@ type Ingredient = {
 /**
  * Ingredients page.
  *
- * Displays all ingredients with navigation to create new ones.
+ * Displays all ingredients in a table with edit and delete actions.
  */
 function Ingredients() {
 
@@ -52,39 +52,93 @@ function Ingredients() {
     loadIngredients();
   }, []);
 
+  /**
+   * Delete ingredient.
+   */
+  async function handleDelete(id: string) {
+
+    const confirmDelete = window.confirm("Are you sure you want to delete this ingredient?");
+
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`/api/ingredients/${id}`, {
+        method: "DELETE"
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete ingredient");
+      }
+
+      // Update UI directly
+      setIngredients((prev) => prev.filter((ing) => ing._id !== id));
+
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }
+
   if (loading) return <p>Loading ingredients...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   return (
     <div>
       <h1>Ingredients</h1>
 
-      {/* 🔥 Link to create ingredient */}
-      <Link to="/Ingredients/Create/">
+      <Link to="/ingredients/create">
         ➕ Add New Ingredient
       </Link>
 
-      <div style={{ marginTop: "20px" }}>
-        {ingredients.map((ing) => (
-          <div
-            key={ing._id}
-            style={{
-              border: "1px solid gray",
-              padding: "10px",
-              marginBottom: "10px"
-            }}
-          >
-            <h3>{ing.name}</h3>
+      <br /><br />
 
-            <p><strong>Calories: {ing.calories} kcal</strong></p>
-            <p>Protein: {ing.protein} g</p>
-            <p>Carbs: {ing.carbs} g</p>
-            <p>Fat: {ing.fat} g</p>
+      <table
+        border={1}
+        cellPadding={8}
+        style={{ borderCollapse: "collapse", width: "100%" }}
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Calories (kcal)</th>
+            <th>Protein (g)</th>
+            <th>Carbs (g)</th>
+            <th>Fat (g)</th>
+            <th>Density</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-            <p>Density: {ing.density}</p>
-          </div>
-        ))}
-      </div>
+        <tbody>
+          {ingredients.map((ing) => (
+            <tr key={ing._id}>
+              <td>{ing.name}</td>
+              <td>{ing.calories}</td>
+              <td>{ing.protein}</td>
+              <td>{ing.carbs}</td>
+              <td>{ing.fat}</td>
+
+              {/* Decimal formatting */}
+              <td>{ing.density?.toFixed(2)}</td>
+
+              {/* 🔥 ACTIONS */}
+              <td>
+                <Link to={`/ingredients/${ing._id}/edit`}>
+                  ✏️ Edit
+                </Link>
+
+                {" | "}
+
+                <button
+                  onClick={() => handleDelete(ing._id)}
+                  style={{ color: "red", cursor: "pointer" }}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

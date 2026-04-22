@@ -34,7 +34,14 @@ function EditBar() {
       <h1>Edit Bar</h1>
 
       <form onSubmit={handleSubmit}>
-        <input value={name} onChange={(e) => setName(e.target.value)} />
+        <label htmlFor="bar-name">Name</label>
+        <input
+          id="bar-name"
+          title="Bar name"
+          placeholder="Enter bar name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
         <button type="submit">Update</button>
       </form>

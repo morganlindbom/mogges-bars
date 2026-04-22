@@ -1,0 +1,34 @@
+/* filename: src/layout/Navbar/Navbar.module.css */
+
+.nav {
+  position: sticky;
+  top: 0px;
+  z-index: 1000;
+
+  background: #dee4fc;
+  border-bottom: 1px solid #ccc;
+}
+
+.inner {
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  gap: 40px;
+  padding: 10px 10px;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+  font-weight: normal;
+  transition: 0.15s;
+}
+
+.link:hover {
+  color: #555;
+}
+
+.active {
+  font-weight: bold;
+  color: blue;
+}

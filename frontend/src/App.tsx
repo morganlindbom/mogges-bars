@@ -10,18 +10,21 @@ import BarDetails from "@/pages/BarDetails";
 import EditBar from "@/pages/EditBar";
 import Ingredients from "@/pages/Ingredients";
 import CreateIngredient from "@/pages/CreateIngredient";
+import EditIngredient from "@/pages/EditIngredient";
 import Stats from "@/pages/Stats";
 
 /**
  * App routing.
  *
- * Defines all application routes.
+ * Defines all application routes using layout-based routing.
  */
 function App() {
   return (
     <BrowserRouter>
-      <MainLayout>
-        <Routes>
+      <Routes>
+
+        {/* Layout wrapper */}
+        <Route element={<MainLayout />}>
 
           {/* Root redirect */}
           <Route path="/" element={<Navigate to="/home" />} />
@@ -35,18 +38,20 @@ function App() {
           <Route path="/bars/:id" element={<BarDetails />} />
           <Route path="/bars/:id/edit" element={<EditBar />} />
 
-          {/* Other collections */}
+          {/* Ingredients */}
           <Route path="/ingredients" element={<Ingredients />} />
           <Route path="/ingredients/create" element={<CreateIngredient />} />
+          <Route path="/ingredients/:id/edit" element={<EditIngredient />} />
 
-          {/* Custom feature */}
+          {/* Stats */}
           <Route path="/stats" element={<Stats />} />
 
           {/* Fallback */}
           <Route path="*" element={<h1>404 - Page not found</h1>} />
 
-        </Routes>
-      </MainLayout>
+        </Route>
+
+      </Routes>
     </BrowserRouter>
   );
 }
