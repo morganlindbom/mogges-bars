@@ -1,22 +1,23 @@
 // filename: src/App.tsx
 
+import { lazy } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout/MainLayout";
 
-import Home from "@/pages/Home";
-import Bars from "@/pages/Bars";
-import Shakes from "@/pages/Shakes";
-import RecipesPage from "@/pages/Recipes/RecipesPage";
-import IngredientsPage from "@/pages/Ingredient/IngredientsPage";
-
-import Statistics from "@/pages/Statistics";
-import Compare from "@/pages/Compare";
-
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
+const Home = lazy(() => import("@/pages/Home"));
+const Bars = lazy(() => import("@/pages/Bars"));
+const Shakes = lazy(() => import("@/pages/Shakes"));
+const RecipesPage = lazy(() => import("@/pages/Recipes/RecipesPage"));
+const IngredientsPage = lazy(
+  () => import("@/pages/Ingredient/IngredientsPage"),
+);
+const Statistics = lazy(() => import("@/pages/Statistics"));
+const Compare = lazy(() => import("@/pages/Compare"));
+const Login = lazy(() => import("@/pages/Login"));
+const Register = lazy(() => import("@/pages/Register"));
 
 function App() {
-/* App routing.
+  /* App routing.
 
    Detailed explanation:
    - Purpose: Define routes
@@ -30,7 +31,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
-
           <Route path="/" element={<Navigate to="/home" />} />
 
           {/* Public */}
@@ -49,7 +49,6 @@ function App() {
           <Route path="/compare" element={<Compare />} />
 
           <Route path="*" element={<h1>404 - Page not found</h1>} />
-
         </Route>
       </Routes>
     </BrowserRouter>

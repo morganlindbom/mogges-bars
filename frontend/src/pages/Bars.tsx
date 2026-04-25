@@ -4,40 +4,18 @@ import { useEffect, useState } from "react";
 import { getRecipes } from "@/services/recipe.api";
 import RecipeList from "@/components/Recipe/RecipeList";
 import { Recipe } from "@/types/Recipe";
+import shell from "./PageShell.module.css";
 
 export default function Bars() {
-/* Bars page.
-
-   Detailed explanation:
-   - Purpose: Display recipes filtered as bars
-   - Inputs: None
-   - Outputs: Filtered list of recipes
-   - Edge cases:
-     - No matching recipes
-     - API failure
-*/
-
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   async function fetchBars() {
-/* Fetch bars.
-
-   Detailed explanation:
-   - Purpose: Retrieve all recipes and filter bars
-   - Inputs: None
-   - Outputs: Updates state with filtered recipes
-   - Edge cases:
-     - Network failure
-*/
-
     try {
       setLoading(true);
 
-      const data = await getRecipes();
-
-      const bars = data.filter((r: Recipe) => r.type === "bar");
+      const bars = await getRecipes<Recipe[]>({ type: "bar" });
 
       setRecipes(bars);
       setError(null);
@@ -49,27 +27,34 @@ export default function Bars() {
   }
 
   useEffect(() => {
-/* Effect hook.
-
-   Detailed explanation:
-   - Purpose: Load bars on mount
-   - Inputs: None
-   - Outputs: Calls fetchBars
-   - Edge cases:
-     - None
-*/
-
     fetchBars();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) {
+    return (
+      <section className={shell.page}>
+        <h1>Bars</h1>
+        <p className={shell.muted}>Loading...</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={shell.page}>
+        <h1>Bars</h1>
+        <p className={shell.error}>{error}</p>
+      </section>
+    );
+  }
 
   return (
-    <div>
+    <section className={shell.page}>
       <h1>Bars</h1>
 
-      <RecipeList recipes={recipes} onRefresh={fetchBars} />
-    </div>
+      <div className={shell.card}>
+        <RecipeList recipes={recipes} onRefresh={fetchBars} />
+      </div>
+    </section>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/auth/useAuth";
+import shell from "./PageShell.module.css";
 
 /**
  * Login page.
@@ -46,7 +47,7 @@ function Login() {
    *
    * Sends login request to backend.
    */
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
 
     setLoading(true);
@@ -87,42 +88,53 @@ function Login() {
    * Render UI.
    */
   return (
-    <div>
+    <section className={shell.page}>
       <h1>Login</h1>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div className={shell.card}>
+        {error && <p className={shell.error}>{error}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit} className={shell.formGrid}>
+          <label className={shell.field}>
+            <span>Email</span>
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
+          <label className={shell.field}>
+            <span>Password</span>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <br />
-        <br />
+          <div className={shell.actions}>
+            <button
+              className={shell.primaryButton}
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </div>
+        </form>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-
-      <p>
-        Don’t have an account? <Link to="/register">Create one</Link>
-      </p>
-    </div>
+        <p className={shell.muted}>
+          Don't have an account? <Link to="/register">Create one</Link>
+        </p>
+      </div>
+    </section>
   );
 }
 

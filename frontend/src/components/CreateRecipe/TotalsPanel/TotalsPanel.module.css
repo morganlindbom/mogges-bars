@@ -4,45 +4,49 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 10px;
 }
 
 .title {
-  margin: 0 0 10px 0;
+  margin: 0;
+  font-size: 1rem;
 }
 
 .section {
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0;
-  font-size: 14px;
+  gap: 12px;
+  padding: 2px 0;
+  font-size: 0.92rem;
 }
 
 .label {
   font-weight: 500;
+  color: var(--text-muted);
 }
 
 .value {
-  font-family: monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 .divider {
   border: none;
-  border-top: 1px solid #ccc;
-  margin: 10px 0;
+  border-top: 1px solid var(--border);
+  margin: 0;
 }
 
 .subtitle {
-  margin: 0 0 6px 0;
-  font-size: 14px;
-  color: #555;
+  margin: 0;
+  font-size: 0.95rem;
 }
 
 .empty {
-  text-align: center;
   font-style: italic;
-  margin-top: 5px;
+  color: var(--text-muted);
 }

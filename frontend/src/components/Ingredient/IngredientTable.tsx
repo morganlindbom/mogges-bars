@@ -2,48 +2,43 @@
 
 import { Ingredient } from "@/types/Ingredient";
 import IngredientRow from "./IngredientRow";
+import shell from "@/pages/PageShell.module.css";
 
-type Props = {
+type Props = Readonly<{
   ingredients: Ingredient[];
   onRefresh: () => void;
-};
+}>;
 
 export default function IngredientTable({ ingredients, onRefresh }: Props) {
-  /*Ingredient table.
-
-  Detailed explanation:
-  - Purpose: Display list of ingredients
-  - Inputs:
-    - ingredients: Ingredient[]
-    - onRefresh: callback function
-  - Outputs: Table UI
-  - Edge cases:
-    - Empty list
-  */
-
   if (ingredients.length === 0) {
-    return <p>No ingredients found</p>;
+    return <p className={shell.muted}>No ingredients found.</p>;
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Calories</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+    <div className={shell.tableWrap}>
+      <table className={shell.table}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Calories</th>
+            <th>Protein</th>
+            <th>Carbs</th>
+            <th>Fat</th>
+            <th>Price/1000g</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        {ingredients.map((ingredient) => (
-          <IngredientRow
-            key={ingredient._id}
-            ingredient={ingredient}
-            onRefresh={onRefresh}
-          />
-        ))}
-      </tbody>
-    </table>
+        <tbody>
+          {ingredients.map((ingredient) => (
+            <IngredientRow
+              key={ingredient._id}
+              ingredient={ingredient}
+              onRefresh={onRefresh}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

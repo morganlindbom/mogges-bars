@@ -2,40 +2,21 @@
 
 import { Ingredient } from "@/types/Ingredient";
 import { deleteIngredient } from "@/services/ingredient.api";
+import { useAuth } from "@/auth/useAuth";
 
-type Props = {
+type Props = Readonly<{
   ingredient: Ingredient;
   onRefresh: () => void;
-};
+}>;
 
 export default function IngredientRow({ ingredient, onRefresh }: Props) {
-  /*Ingredient row.
-
-  Detailed explanation:
-  - Purpose: Represent a single ingredient row
-  - Inputs:
-    - ingredient object
-    - refresh callback
-  - Outputs: Table row
-  - Edge cases:
-    - delete failure
-  */
+  const { token } = useAuth();
 
   async function handleDelete() {
-    /*Delete ingredient.
-
-    Detailed explanation:
-    - Purpose: Remove ingredient from backend
-    - Inputs: ingredient id
-    - Outputs: triggers refresh
-    - Edge cases:
-      - API failure
-    */
-
     try {
       await deleteIngredient(ingredient._id);
       onRefresh();
-    } catch (err) {
+    } catch {
       console.error("Delete failed");
     }
   }
@@ -44,8 +25,16 @@ export default function IngredientRow({ ingredient, onRefresh }: Props) {
     <tr>
       <td>{ingredient.name}</td>
       <td>{ingredient.calories}</td>
+      <td>{ingredient.protein}</td>
+      <td>{ingredient.carbs}</td>
+      <td>{ingredient.fat}</td>
+      <td>{ingredient.pricePer1000g}</td>
       <td>
-        <button onClick={handleDelete}>Delete</button>
+        {token ? (
+          <button onClick={handleDelete}>Delete</button>
+        ) : (
+          "Login required"
+        )}
       </td>
     </tr>
   );

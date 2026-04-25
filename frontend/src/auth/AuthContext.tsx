@@ -1,6 +1,6 @@
 // filename: src/auth/AuthContext.tsx
 
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect, useMemo, ReactNode } from "react";
 
 type AuthContextType = {
   token: string | null;
@@ -10,21 +10,15 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-/* Auth provider.
+type AuthProviderProps = Readonly<{
+  children: ReactNode;
+}>;
 
-   Detailed explanation:
-   - Purpose: Store global authentication state
-   - Inputs: children
-   - Outputs: Context provider
-   - Edge cases:
-     - Token missing in storage
-*/
-
+export function AuthProvider({ children }: AuthProviderProps) {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-/* Init token from storage.
+    /* Init token from storage.
 
    Detailed explanation:
    - Purpose: Restore session on reload
@@ -41,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   function login(newToken: string) {
-/* Login handler.
+    /* Login handler.
 
    Detailed explanation:
    - Purpose: Save JWT token
@@ -56,23 +50,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function logout() {
-/* Logout handler.
-
-   Detailed explanation:
-   - Purpose: Clear authentication
-   - Inputs: None
-   - Outputs: resets state + storage
-   - Edge cases:
-     - None
-*/
-
     setToken(null);
     localStorage.removeItem("token");
   }
 
-  return (
-    <AuthContext.Provider value={{ token, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = useMemo(() => ({ token, login, logout }), [token]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

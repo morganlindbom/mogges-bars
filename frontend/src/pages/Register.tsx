@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import shell from "./PageShell.module.css";
 
 /**
  * Register page.
@@ -9,34 +10,26 @@ import { useNavigate } from "react-router-dom";
  * Handles user account creation.
  */
 function Register() {
-
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  /**
-   * Handle input change.
-   */
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
 
     setForm({
       ...form,
-      [name]: value
+      [name]: value,
     });
   }
 
-  /**
-   * Handle submit.
-   */
-  async function handleSubmit(e: React.FormEvent) {
-
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
 
     setLoading(true);
@@ -46,18 +39,16 @@ function Register() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
       });
 
       if (!res.ok) {
         throw new Error("Failed to create account");
       }
 
-      // 🔥 efter register → skicka till login
       navigate("/login");
-
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -66,41 +57,45 @@ function Register() {
   }
 
   return (
-    <div>
-
+    <section className={shell.page}>
       <h1>Create Account</h1>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div className={shell.card}>
+        {error && <p className={shell.error}>{error}</p>}
 
-      <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={shell.formGrid}>
+          <label className={shell.field}>
+            <span>Email</span>
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+          <label className={shell.field}>
+            <span>Password</span>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
 
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-
-        <br /><br />
-
-        <button disabled={loading}>
-          {loading ? "Creating..." : "Create Account"}
-        </button>
-
-      </form>
-
-    </div>
+          <div className={shell.actions}>
+            <button className={shell.primaryButton} disabled={loading}>
+              {loading ? "Creating..." : "Create Account"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 }
 

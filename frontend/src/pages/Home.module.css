@@ -3,74 +3,57 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  gap: 15px; /* 🔥 mindre gap */
-  min-height: 0;
+  gap: 20px;
 }
-
-/* HERO */
 
 .hero {
   text-align: center;
-  padding: 5px 0; /* 🔥 mycket mindre */
+  padding: 10px 0;
 }
 
 .title {
-  font-size: 26px; /* 🔥 mindre */
-  margin-bottom: 6px;
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  margin-bottom: 8px;
 }
 
 .subtitle {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
-  color: #666;
-  line-height: 1.4;
-  font-size: 13px; /* 🔥 mindre */
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-size: 1rem;
 }
-
-/* GRID */
 
 .grid {
-  flex: 1;
   display: grid;
-
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px; /* 🔥 mindre gap */
-
-  min-height: 0;
+  gap: 16px;
 }
-
-/* CARD */
 
 .card {
   border: 1px solid var(--border);
-  border-radius: 10px;
-
-  padding: 18px; /* 🔥 mindre padding */
-  background: #fff;
-
-  min-height: 130px; /* 🔥 mindre höjd */
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 18px;
+  background: var(--surface);
+  min-height: 170px;
 
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 🔥 centrerar innehåll */
+  justify-content: center;
 }
 
-/* TEXT */
-
 .cardTitle {
-  font-size: 17px;
-  margin-bottom: 6px;
+  font-size: 1.05rem;
+  margin-bottom: 8px;
   color: var(--text-h);
 }
 
 .cardText {
-  font-size: 12.5px; /* 🔥 mindre */
-  color: #666;
-  line-height: 1.4;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
-
-/* RESPONSIVE */
 
 @media (max-width: 768px) {
   .grid {

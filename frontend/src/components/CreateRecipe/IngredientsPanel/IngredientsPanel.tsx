@@ -2,34 +2,22 @@
 
 import { useState } from "react";
 import styles from "./IngredientsPanel.module.css";
+import { Ingredient } from "@/types/Ingredient";
 
-/**
- * Ingredient type.
- */
-type Ingredient = {
-  _id: string;
-  name: string;
-};
-
-/**
- * Props definition.
- */
 type Props = {
   ingredients: Ingredient[];
   onAdd: (ingredient: Ingredient) => void;
 };
 
-function IngredientsPanel({ ingredients, onAdd }: Props) {
-  /**
-   * Local state for search input.
-   */
+function IngredientsPanel({ ingredients = [], onAdd }: Props) {
+/* Ingredients panel.
+
+   Detailed explanation:
+   - Uses ONLY Ingredient type
+*/
+
   const [search, setSearch] = useState("");
 
-  /**
-   * Filters ingredients based on search input.
-   *
-   * Performs a case-insensitive match.
-   */
   const filtered = ingredients.filter((ing) =>
     ing.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -38,20 +26,17 @@ function IngredientsPanel({ ingredients, onAdd }: Props) {
     <div className={styles.wrapper}>
       <div className={styles.inner}>
 
-        {/* HEADER */}
         <div className={styles.header}>
           <h3 className={styles.title}>Ingredients</h3>
 
           <input
             className={styles.search}
             type="text"
-            placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        {/* GRID */}
         <div className={styles.grid}>
           {filtered.map((ing) => (
             <button
@@ -64,9 +49,7 @@ function IngredientsPanel({ ingredients, onAdd }: Props) {
           ))}
 
           {filtered.length === 0 && (
-            <p className={styles.empty}>
-              No ingredients found
-            </p>
+            <p className={styles.empty}>No ingredients found</p>
           )}
         </div>
 

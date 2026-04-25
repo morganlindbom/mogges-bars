@@ -1,78 +1,108 @@
 // filename: src/pages/Recipes/RecipesPage.tsx
 
-import { useEffect, useState } from "react";
-import RecipeList from "@/components/Recipe/RecipeList";
-import RecipeForm from "@/components/Recipe/RecipeForm";
-import { getRecipes } from "@/services/recipe.api";
-import { Recipe } from "@/types/Recipe";
+import { useState, useEffect } from "react";
+import {
+  IngredientsPanel,
+  SelectedPanel,
+  TotalsPanel,
+  ChartPanel,
+} from "@/components/CreateRecipe";
+import { getIngredients } from "@/services/ingredient.api";
+import { createRecipe } from "@/services/recipe.api";
+import { useAuth } from "@/auth/useAuth";
+
+import { Ingredient } from "@/types/Ingredient";
+import { SelectedIngredient } from "@/types/SelectedIngredient";
 
 export default function RecipesPage() {
-/* Recipes page.
+  /* Recipes page.
 
    Detailed explanation:
-   - Purpose: Manage the lifecycle of recipe data (fetching, refreshing)
-   - Inputs: None
-   - Outputs: Rendered UI with list and form
-   - Edge cases:
-     - API failure
-     - Empty dataset
+   - Full builder with correct typing
 */
 
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
 
-  async function fetchRecipes() {
-/* Fetch recipes.
-
-   Detailed explanation:
-   - Purpose: Retrieve recipe data from backend
-   - Inputs: None
-   - Outputs: Updates state
-   - Edge cases:
-     - Network failure
-     - Invalid response
-*/
-
-    try {
-      setLoading(true);
-      const data = await getRecipes();
-      setRecipes(data);
-      setError(null);
-    } catch (err) {
-      setError("Failed to fetch recipes");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [selectedIngredients, setSelectedIngredients] = useState<
+    SelectedIngredient[]
+  >([]);
+  const [name, setName] = useState("");
+  const [type, setType] = useState<"bar" | "shake">("bar");
 
   useEffect(() => {
-/* Effect hook.
+    /* Load ingredients */
 
-   Detailed explanation:
-   - Purpose: Trigger initial data fetch on component mount
-   - Inputs: None
-   - Outputs: Calls fetchRecipes once
-   - Edge cases:
-     - None
-*/
-
-    fetchRecipes();
+    getIngredients().then(setIngredients);
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  function handleAdd(ingredient: Ingredient) {
+    /* Add ingredient */
+
+    setSelectedIngredients((prev) => [
+      ...prev,
+      {
+        ingredientId: ingredient._id,
+        name: ingredient.name,
+        calories: ingredient.calories,
+        grams: 0,
+      },
+    ]);
+  }
+
+  async function handleCreate() {
+    /* Create recipe */
+
+    if (!token) return;
+
+    // 🔥 CRITICAL FIX: map to backend format
+    const payload = {
+      name,
+      type,
+      ingredients: selectedIngredients.map((item) => ({
+        ingredientId: item._id,
+        grams: item.grams,
+      })),
+    };
+
+    await createRecipe(payload);
+
+    setSelectedIngredients([]);
+    setName("");
+  }
 
   return (
     <div>
       <h1>Recipes</h1>
 
-      <RecipeForm onSuccess={fetchRecipes} />
+      <label htmlFor="name">Recipe Name</label>
+      <input id="name" value={name} onChange={(e) => setName(e.target.value)} />
 
-      <RecipeList
-        recipes={recipes}
-        onRefresh={fetchRecipes}
-      />
+      <label htmlFor="type">Type</label>
+      <select
+        id="type"
+        value={type}
+        onChange={(e) => setType(e.target.value as any)}
+      >
+        <option value="bar">Bar</option>
+        <option value="shake">Shake</option>
+      </select>
+
+      <div
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}
+      >
+        <IngredientsPanel ingredients={ingredients} onAdd={handleAdd} />
+
+        <SelectedPanel
+          items={selectedIngredients}
+          onChange={setSelectedIngredients}
+        />
+
+        <TotalsPanel items={selectedIngredients} />
+        <ChartPanel items={selectedIngredients} />
+      </div>
+
+      {token && <button onClick={handleCreate}>Create</button>}
     </div>
   );
 }

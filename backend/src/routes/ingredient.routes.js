@@ -15,8 +15,7 @@ const router = express.Router();
 router.post("/", verifyToken, createIngredient);
 router.get("/", getIngredients);
 router.get("/:id", getIngredientById);
-router.post("/", createIngredient);
-router.put("/:id", updateIngredient);
-router.delete("/:id", deleteIngredient);
+router.put("/:id", verifyToken, updateIngredient);
+router.delete("/:id", verifyToken, deleteIngredient);
 
 export default router;

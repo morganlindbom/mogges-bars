@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { Recipe } from "@/types/Recipe";
 import styles from "./Statistics.module.css";
+import shell from "./PageShell.module.css";
+import { getRecipes } from "@/services/recipe.api";
+import { getIngredients } from "@/services/ingredient.api";
 
 import {
   BarChart,
@@ -11,8 +14,17 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
+
+type Ingredient = {
+  _id: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  pricePer1000g: number;
+};
 
 /**
  * Statistics page.
@@ -21,18 +33,28 @@ import {
  */
 function Statistics() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [ingredients, setIngredients] = useState<any[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
-      const r = await fetch("/api/recipes");
-      const i = await fetch("/api/ingredients");
+      try {
+        setLoading(true);
+        const [recipeData, ingredientData] = await Promise.all([
+          getRecipes<Recipe[]>(),
+          getIngredients<Ingredient[]>(),
+        ]);
 
-      setRecipes(await r.json());
-      setIngredients(await i.json());
-      setLoading(false);
+        setRecipes(recipeData);
+        setIngredients(ingredientData);
+        setError(null);
+      } catch {
+        setError("Failed to load statistics data.");
+      } finally {
+        setLoading(false);
+      }
     }
 
     load();
@@ -40,17 +62,12 @@ function Statistics() {
 
   function toggle(id: string) {
     setSelected((prev) =>
-      prev.includes(id)
-        ? prev.filter((x) => x !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   }
 
-  /**
-   * 🔥 TRUE calculation per 100g
-   */
   function calculatePer100(recipe: Recipe) {
-    let totals = {
+    const totals = {
       calories: 0,
       protein: 0,
       carbs: 0,
@@ -60,7 +77,7 @@ function Statistics() {
     };
 
     recipe.ingredients.forEach((item) => {
-      const ing = ingredients.find(i => i._id === item.ingredientId);
+      const ing = ingredients.find((i) => i._id === item.ingredientId);
       if (!ing) return;
 
       const factor = item.grams / 100;
@@ -85,9 +102,7 @@ function Statistics() {
     };
   }
 
-  const selectedRecipes = recipes.filter((r) =>
-    selected.includes(r._id)
-  );
+  const selectedRecipes = recipes.filter((r) => selected.includes(r._id));
 
   const macroData = selectedRecipes.map((r) => {
     const data = calculatePer100(r);
@@ -95,7 +110,7 @@ function Statistics() {
       name: r.name,
       protein: data?.protein || 0,
       carbs: data?.carbs || 0,
-      fat: data?.fat || 0
+      fat: data?.fat || 0,
     };
   });
 
@@ -103,116 +118,127 @@ function Statistics() {
     const data = calculatePer100(r);
     return {
       name: r.name,
-      price: data?.price || 0
+      price: data?.price || 0,
     };
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <section className={shell.page}>
+        <h1>Statistics</h1>
+        <p className={shell.muted}>Loading...</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={shell.page}>
+        <h1>Statistics</h1>
+        <p className={shell.error}>{error}</p>
+      </section>
+    );
+  }
 
   return (
-    <div className={styles.container}>
+    <section className={shell.page}>
+      <h1>Statistics</h1>
 
-      {/* PANEL 1 */}
-      <div className={styles.panel}>
-        <div className={styles.title}>Overview</div>
-        <p>Total recipes: {recipes.length}</p>
-      </div>
+      <div className={styles.container}>
+        <div className={shell.card}>
+          <h2>Overview</h2>
+          <p>Total recipes: {recipes.length}</p>
+          <p>Selected recipes: {selectedRecipes.length}</p>
+        </div>
 
-      {/* PANEL 2 */}
-      <div className={styles.panel}>
-        <div className={styles.title}>Select Recipes</div>
+        <div className={shell.card}>
+          <h2>Select Recipes</h2>
 
-        {recipes.map((r) => (
-          <div key={r._id}>
-            <label>
-              <input
-                type="checkbox"
-                checked={selected.includes(r._id)}
-                onChange={() => toggle(r._id)}
-              />
-              {r.name}
-            </label>
+          <div className={shell.checklist}>
+            {recipes.map((r) => (
+              <label key={r._id} className={shell.checkItem}>
+                <input
+                  type="checkbox"
+                  checked={selected.includes(r._id)}
+                  onChange={() => toggle(r._id)}
+                />
+                <span>{r.name}</span>
+              </label>
+            ))}
           </div>
-        ))}
+        </div>
+
+        <div className={shell.card}>
+          <h2>Macro Comparison (per 100g)</h2>
+
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={macroData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="protein" fill="#3ca661" />
+              <Bar dataKey="carbs" fill="#3b78d8" />
+              <Bar dataKey="fat" fill="#d9534f" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className={shell.card}>
+          <h2>Price Comparison (per 100g)</h2>
+
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={priceData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="price" fill="#6f55b8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
-      {/* PANEL 3 */}
-      <div className={styles.panel}>
-        <div className={styles.title}>Macro Comparison (per 100g)</div>
-
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={macroData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-
-            {/* 🔥 FIXED COLORS */}
-            <Bar dataKey="protein" fill="#4CAF50" /> {/* Green */}
-            <Bar dataKey="carbs" fill="#2196F3" />   {/* Blue */}
-            <Bar dataKey="fat" fill="#F44336" />     {/* Red */}
-
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* PANEL 4 */}
-      <div className={styles.panel}>
-        <div className={styles.title}>Price Comparison (per 100g)</div>
-
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={priceData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-
-            {/* 🔥 PRICE COLOR */}
-            <Bar dataKey="price" fill="purple" /> {/* Purple */}
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* ANALYSIS */}
-      <div style={{ gridColumn: "1 / span 2" }}>
+      <div className={shell.card}>
         <h2>Analysis (per 100g)</h2>
 
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Calories</th>
-              <th>Carbs</th>
-              <th>Fat</th>
-              <th>Protein</th>
-              <th>Price (kr)</th>
-            </tr>
-          </thead>
+        <div className={shell.tableWrap}>
+          <table className={shell.table}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Calories</th>
+                <th>Carbs</th>
+                <th>Fat</th>
+                <th>Protein</th>
+                <th>Price (kr)</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {selectedRecipes.map((r) => {
-              const data = calculatePer100(r);
-              if (!data) return null;
+            <tbody>
+              {selectedRecipes.map((r) => {
+                const data = calculatePer100(r);
+                if (!data) return null;
 
-              return (
-                <tr key={r._id}>
-                  <td>{r.name}</td>
-                  <td>{data.calories.toFixed(1)}</td>
-                  <td>{data.carbs.toFixed(1)}</td>
-                  <td>{data.fat.toFixed(1)}</td>
-                  <td>{data.protein.toFixed(1)}</td>
-                  <td>{data.price.toFixed(2)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                return (
+                  <tr key={r._id}>
+                    <td>{r.name}</td>
+                    <td>{data.calories.toFixed(1)}</td>
+                    <td>{data.carbs.toFixed(1)}</td>
+                    <td>{data.fat.toFixed(1)}</td>
+                    <td>{data.protein.toFixed(1)}</td>
+                    <td>{data.price.toFixed(2)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
-        <p style={{ marginTop: "10px" }}>
+        <p className={styles.note}>
           All values are recalculated per 100g directly from ingredients.
         </p>
       </div>
-
-    </div>
+    </section>
   );
 }
 

@@ -5,41 +5,21 @@ import IngredientTable from "@/components/Ingredient/IngredientTable";
 import IngredientForm from "@/components/Ingredient/IngredientForm";
 import { getIngredients } from "@/services/ingredient.api";
 import { Ingredient } from "@/types/Ingredient";
+import shell from "@/pages/PageShell.module.css";
+import styles from "./IngredientsPage.module.css";
 
 export default function IngredientsPage() {
-  /*Ingredients page.
-
-  Detailed explanation:
-  - Purpose: Manage ingredient data lifecycle (fetch, refresh)
-  - Inputs: None
-  - Outputs: Rendered UI with table and form
-  - Edge cases:
-    - API failure
-    - Empty dataset
-  */
-
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   async function fetchIngredients() {
-    /*Fetch ingredients from API.
-
-    Detailed explanation:
-    - Purpose: Retrieve ingredient data from backend
-    - Inputs: None
-    - Outputs: Updates state
-    - Edge cases:
-      - Network failure
-      - Invalid response
-    */
-
     try {
       setLoading(true);
-      const data = await getIngredients();
+      const data = await getIngredients<Ingredient[]>();
       setIngredients(data);
       setError(null);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch ingredients");
     } finally {
       setLoading(false);
@@ -50,19 +30,40 @@ export default function IngredientsPage() {
     fetchIngredients();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) {
+    return (
+      <section className={shell.page}>
+        <h1>Ingredients</h1>
+        <p className={shell.muted}>Loading...</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={shell.page}>
+        <h1>Ingredients</h1>
+        <p className={shell.error}>{error}</p>
+      </section>
+    );
+  }
 
   return (
-    <div>
+    <section className={shell.page}>
       <h1>Ingredients</h1>
 
-      <IngredientForm onSuccess={fetchIngredients} />
+      <div className={shell.card}>
+        <h2>Add Ingredient</h2>
+        <IngredientForm onSuccess={fetchIngredients} />
+      </div>
 
-      <IngredientTable
-        ingredients={ingredients}
-        onRefresh={fetchIngredients}
-      />
-    </div>
+      <div className={`${shell.card} ${styles.tableCard}`}>
+        <h2>Ingredient Library</h2>
+        <IngredientTable
+          ingredients={ingredients}
+          onRefresh={fetchIngredients}
+        />
+      </div>
+    </section>
   );
 }

@@ -1,18 +1,15 @@
 // filename: src/services/ingredient.api.ts
 
+import { Ingredient } from "@/types/Ingredient";
+
 const BASE_URL = "/api/ingredients";
 
 function getAuthHeaders() {
 /* Get auth headers.
 
    Detailed explanation:
-   - Purpose: Attach JWT token to requests
-   - Inputs: None
-   - Outputs: Headers object
-   - Edge cases:
-     - Missing token
+   - Attach JWT token if available
 */
-
   const token = localStorage.getItem("token");
 
   return {
@@ -21,20 +18,13 @@ function getAuthHeaders() {
   };
 }
 
-export async function getIngredients() {
+export async function getIngredients(): Promise<Ingredient[]> {
 /* Get ingredients.
 
    Detailed explanation:
-   - Purpose: Fetch all ingredients
-   - Inputs: None
-   - Outputs: Ingredient array
-   - Edge cases:
-     - API failure
+   - Fetch all ingredients from backend
 */
-
-  const res = await fetch(BASE_URL, {
-    headers: getAuthHeaders(),
-  });
+  const res = await fetch(BASE_URL);
 
   if (!res.ok) {
     throw new Error("Failed to fetch ingredients");
@@ -43,15 +33,17 @@ export async function getIngredients() {
   return res.json();
 }
 
-export async function createIngredient(data: { name: string; calories: number }) {
+export async function createIngredient(data: {
+  name: string;
+  calories: number;
+  density: number;
+  pricePer1000g: number;
+}) {
 /* Create ingredient.
 
    Detailed explanation:
-   - Purpose: Create new ingredient
-   - Inputs: ingredient data
-   - Outputs: created object
+   - Send POST request to create ingredient
 */
-
   const res = await fetch(BASE_URL, {
     method: "POST",
     headers: getAuthHeaders(),
@@ -69,11 +61,8 @@ export async function deleteIngredient(id: string) {
 /* Delete ingredient.
 
    Detailed explanation:
-   - Purpose: Remove ingredient
-   - Inputs: ID
-   - Outputs: success response
+   - Remove ingredient by ID
 */
-
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: getAuthHeaders(),

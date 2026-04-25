@@ -1,14 +1,36 @@
 // filename: src/services/recipe.api.ts
 
+import { Recipe } from "@/types/Recipe";
+
+export type RecipeIngredientInput = {
+/* Recipe ingredient input.
+
+   Detailed explanation:
+   - Backend contract for ingredient inside recipe
+*/
+  ingredientId: string;
+  grams: number;
+};
+
+export type CreateRecipePayload = {
+/* Create recipe payload.
+
+   Detailed explanation:
+   - Payload for POST request
+*/
+  name: string;
+  type: "bar" | "shake";
+  ingredients: RecipeIngredientInput[];
+};
+
 const BASE_URL = "/api/recipes";
 
 function getAuthHeaders() {
 /* Get auth headers.
 
    Detailed explanation:
-   - Purpose: Attach JWT token to requests
+   - Attach JWT token if available
 */
-
   const token = localStorage.getItem("token");
 
   return {
@@ -17,11 +39,11 @@ function getAuthHeaders() {
   };
 }
 
-export async function getRecipes() {
-/* Get all recipes.
+export async function getRecipes(): Promise<Recipe[]> {
+/* Get recipes.
 
    Detailed explanation:
-   - Purpose: Fetch all recipes
+   - Fetch all recipes from backend
 */
 
   const res = await fetch(BASE_URL);
@@ -33,11 +55,11 @@ export async function getRecipes() {
   return res.json();
 }
 
-export async function createRecipe(data: { name: string; type: "bar" | "shake" }) {
+export async function createRecipe(data: CreateRecipePayload) {
 /* Create recipe.
 
    Detailed explanation:
-   - Purpose: Create new recipe
+   - Send POST request with correct payload
 */
 
   const res = await fetch(BASE_URL, {
@@ -57,7 +79,7 @@ export async function deleteRecipe(id: string) {
 /* Delete recipe.
 
    Detailed explanation:
-   - Purpose: Remove recipe
+   - Remove recipe by ID
 */
 
   const res = await fetch(`${BASE_URL}/${id}`, {
