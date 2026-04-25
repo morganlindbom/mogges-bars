@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@create-bar/*": ["src/components/create-bar/*"]
+      "@CreateRecipe/*": ["src/components/CreateRecipe/*"]
     },
 
     "module": "ESNext",

@@ -48,28 +48,19 @@ export async function getIngredientById(req, res) {
  * Stores nutritional values per 100g.
  */
 export async function createIngredient(req, res) {
-
   try {
-    const { name, calories, carbs, fat, protein, density } = req.body;
+    const ingredient = await Ingredient.create({
+      ...req.body,
 
-    // Basic validation
-    if (!name) {
-      return res.status(400).json({ error: "Name is required" });
-    }
-
-    const newIngredient = await Ingredient.create({
-      name,
-      calories,
-      carbs,
-      fat,
-      protein,
-      density
+      // Keep track of who created the ingredient.
+      author: req.user.email ?? null
     });
 
-    res.status(201).json(newIngredient);
+    res.status(201).json(ingredient);
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("CREATE INGREDIENT ERROR:", err);
+    res.status(500).json({ message: err.message });
   }
 }
 

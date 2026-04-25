@@ -1,48 +1,46 @@
-// filename: src/pages/Bars.tsx
+// filename: src/pages/Recipes/RecipesPage.tsx
 
 import { useEffect, useState } from "react";
-import { getRecipes } from "@/services/recipe.api";
 import RecipeList from "@/components/Recipe/RecipeList";
+import RecipeForm from "@/components/Recipe/RecipeForm";
+import { getRecipes } from "@/services/recipe.api";
 import { Recipe } from "@/types/Recipe";
 
-export default function Bars() {
-/* Bars page.
+export default function RecipesPage() {
+/* Recipes page.
 
    Detailed explanation:
-   - Purpose: Display recipes filtered as bars
+   - Purpose: Manage the lifecycle of recipe data (fetching, refreshing)
    - Inputs: None
-   - Outputs: Filtered list of recipes
+   - Outputs: Rendered UI with list and form
    - Edge cases:
-     - No matching recipes
      - API failure
+     - Empty dataset
 */
 
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  async function fetchBars() {
-/* Fetch bars.
+  async function fetchRecipes() {
+/* Fetch recipes.
 
    Detailed explanation:
-   - Purpose: Retrieve all recipes and filter bars
+   - Purpose: Retrieve recipe data from backend
    - Inputs: None
-   - Outputs: Updates state with filtered recipes
+   - Outputs: Updates state
    - Edge cases:
      - Network failure
+     - Invalid response
 */
 
     try {
       setLoading(true);
-
       const data = await getRecipes();
-
-      const bars = data.filter((r: Recipe) => r.type === "bar");
-
-      setRecipes(bars);
+      setRecipes(data);
       setError(null);
-    } catch {
-      setError("Failed to fetch bars");
+    } catch (err) {
+      setError("Failed to fetch recipes");
     } finally {
       setLoading(false);
     }
@@ -52,14 +50,14 @@ export default function Bars() {
 /* Effect hook.
 
    Detailed explanation:
-   - Purpose: Load bars on mount
+   - Purpose: Trigger initial data fetch on component mount
    - Inputs: None
-   - Outputs: Calls fetchBars
+   - Outputs: Calls fetchRecipes once
    - Edge cases:
      - None
 */
 
-    fetchBars();
+    fetchRecipes();
   }, []);
 
   if (loading) return <p>Loading...</p>;
@@ -67,9 +65,14 @@ export default function Bars() {
 
   return (
     <div>
-      <h1>Bars</h1>
+      <h1>Recipes</h1>
 
-      <RecipeList recipes={recipes} onRefresh={fetchBars} />
+      <RecipeForm onSuccess={fetchRecipes} />
+
+      <RecipeList
+        recipes={recipes}
+        onRefresh={fetchRecipes}
+      />
     </div>
   );
 }

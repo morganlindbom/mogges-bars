@@ -1,0 +1,39 @@
+/* filename: src/pages/Statistics.module.css */
+
+.container {
+  width: 98%;
+  margin: 0 auto;
+  padding: 0px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr; /* 🔥 lika stora rutor */
+  gap: 20px;
+
+  height: 80vh;
+}
+
+.panel {
+  background: #f5f7ff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 🔥 håller graf + analys separerade */
+}
+
+.title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.analysis {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+  background: #eef2ff;
+  padding: 8px;
+  border-radius: 6px;
+}

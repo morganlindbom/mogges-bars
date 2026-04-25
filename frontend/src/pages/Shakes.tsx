@@ -1,15 +1,15 @@
-// filename: src/pages/Bars.tsx
+// filename: src/pages/Shakes.tsx
 
 import { useEffect, useState } from "react";
 import { getRecipes } from "@/services/recipe.api";
 import RecipeList from "@/components/Recipe/RecipeList";
 import { Recipe } from "@/types/Recipe";
 
-export default function Bars() {
-/* Bars page.
+export default function Shakes() {
+/* Shakes page.
 
    Detailed explanation:
-   - Purpose: Display recipes filtered as bars
+   - Purpose: Display recipes filtered as shakes
    - Inputs: None
    - Outputs: Filtered list of recipes
    - Edge cases:
@@ -21,13 +21,13 @@ export default function Bars() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  async function fetchBars() {
-/* Fetch bars.
+  async function fetchShakes() {
+/* Fetch shakes.
 
    Detailed explanation:
-   - Purpose: Retrieve all recipes and filter bars
+   - Purpose: Retrieve all recipes and filter shakes
    - Inputs: None
-   - Outputs: Updates state with filtered recipes
+   - Outputs: Updates state
    - Edge cases:
      - Network failure
 */
@@ -37,12 +37,12 @@ export default function Bars() {
 
       const data = await getRecipes();
 
-      const bars = data.filter((r: Recipe) => r.type === "bar");
+      const shakes = data.filter((r: Recipe) => r.type === "shake");
 
-      setRecipes(bars);
+      setRecipes(shakes);
       setError(null);
     } catch {
-      setError("Failed to fetch bars");
+      setError("Failed to fetch shakes");
     } finally {
       setLoading(false);
     }
@@ -52,14 +52,12 @@ export default function Bars() {
 /* Effect hook.
 
    Detailed explanation:
-   - Purpose: Load bars on mount
+   - Purpose: Load shakes on mount
    - Inputs: None
-   - Outputs: Calls fetchBars
-   - Edge cases:
-     - None
+   - Outputs: Calls fetchShakes
 */
 
-    fetchBars();
+    fetchShakes();
   }, []);
 
   if (loading) return <p>Loading...</p>;
@@ -67,9 +65,9 @@ export default function Bars() {
 
   return (
     <div>
-      <h1>Bars</h1>
+      <h1>Shakes</h1>
 
-      <RecipeList recipes={recipes} onRefresh={fetchBars} />
+      <RecipeList recipes={recipes} onRefresh={fetchShakes} />
     </div>
   );
 }

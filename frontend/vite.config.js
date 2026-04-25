@@ -19,6 +19,7 @@ const __dirname = path.dirname(__filename);
  *
  * - Adds alias '@' pointing to src
  * - Adds proxy to backend (localhost:3000)
+ * - Ensures Authorization headers are forwarded
  */
 export default defineConfig({
   plugins: [react()],
@@ -26,7 +27,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@create-bar": path.resolve(__dirname, "src/components/create-bar")
+      "@CreateRecipe": path.resolve(__dirname, "./src/components/CreateRecipe")
     }
   },
 
@@ -34,14 +35,30 @@ export default defineConfig({
    * Dev server configuration
    *
    * Proxies API requests to backend server.
-   * This allows using "/api/..." in frontend
-   * without hardcoding backend URL.
+   * Ensures headers (especially Authorization) are preserved.
    */
   server: {
     proxy: {
       "/api": {
         target: "http://localhost:3000",
-        changeOrigin: true
+        changeOrigin: true,
+        secure: false,
+
+        /**
+         * Forward Authorization header explicitly
+         *
+         * Some environments may drop headers without this.
+         */
+        configure: (proxy) => {
+          proxy.on("proxyReq", (proxyReq, req) => {
+            if (req.headers.authorization) {
+              proxyReq.setHeader(
+                "Authorization",
+                req.headers.authorization
+              );
+            }
+          });
+        }
       }
     }
   }

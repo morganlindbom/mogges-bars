@@ -1,56 +1,56 @@
 // filename: src/App.tsx
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import MainLayout from "@/layouts/MainLayout";
+import MainLayout from "@/layouts/MainLayout/MainLayout";
 
 import Home from "@/pages/Home";
 import Bars from "@/pages/Bars";
-import CreateBar from "@/pages/CreateBar";
-import BarDetails from "@/pages/BarDetails";
-import EditBar from "@/pages/EditBar";
-import Ingredients from "@/pages/Ingredients";
-import CreateIngredient from "@/pages/CreateIngredient";
-import EditIngredient from "@/pages/EditIngredient";
-import Stats from "@/pages/Stats";
+import Shakes from "@/pages/Shakes";
+import RecipesPage from "@/pages/Recipes/RecipesPage";
+import IngredientsPage from "@/pages/Ingredient/IngredientsPage";
 
-/**
- * App routing.
- *
- * Defines all application routes using layout-based routing.
- */
+import Statistics from "@/pages/Statistics";
+import Compare from "@/pages/Compare";
+
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+
 function App() {
+/* App routing.
+
+   Detailed explanation:
+   - Purpose: Define routes
+   - Inputs: None
+   - Outputs: Router structure
+   - Edge cases:
+     - 404 fallback
+*/
+
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Layout wrapper */}
         <Route element={<MainLayout />}>
 
-          {/* Root redirect */}
           <Route path="/" element={<Navigate to="/home" />} />
 
-          {/* Core pages */}
+          {/* Public */}
           <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Public READ */}
+          <Route path="/recipes" element={<RecipesPage />} />
           <Route path="/bars" element={<Bars />} />
+          <Route path="/shakes" element={<Shakes />} />
+          <Route path="/ingredients" element={<IngredientsPage />} />
 
-          {/* CRUD routes */}
-          <Route path="/bars/create" element={<CreateBar />} />
-          <Route path="/bars/:id" element={<BarDetails />} />
-          <Route path="/bars/:id/edit" element={<EditBar />} />
+          {/* Other */}
+          <Route path="/statistics" element={<Statistics />} />
+          <Route path="/compare" element={<Compare />} />
 
-          {/* Ingredients */}
-          <Route path="/ingredients" element={<Ingredients />} />
-          <Route path="/ingredients/create" element={<CreateIngredient />} />
-          <Route path="/ingredients/:id/edit" element={<EditIngredient />} />
-
-          {/* Stats */}
-          <Route path="/stats" element={<Stats />} />
-
-          {/* Fallback */}
           <Route path="*" element={<h1>404 - Page not found</h1>} />
 
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

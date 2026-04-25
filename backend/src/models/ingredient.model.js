@@ -5,7 +5,11 @@ import mongoose from "mongoose";
 /**
  * Ingredient schema
  *
- * Defines nutritional values per ingredient.
+ * Represents a single ingredient with:
+ * - nutritional values (per 100g)
+ * - physical properties
+ * - pricing
+ * - metadata for future features (auth, tracking)
  */
 const ingredientSchema = new mongoose.Schema(
   {
@@ -15,6 +19,7 @@ const ingredientSchema = new mongoose.Schema(
       trim: true
     },
 
+    // Nutritional values (per 100g)
     calories: {
       type: Number,
       required: true,
@@ -39,19 +44,38 @@ const ingredientSchema = new mongoose.Schema(
       min: 0
     },
 
+    // Physical property
     density: {
       type: Number,
       required: true,
       min: 0
+    },
+
+    // 🔥 Pricing (per 1000g)
+    pricePer1000g: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+
+    // 🔥 Metadata (future use)
+    author: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      default: null
     }
   },
   {
-    timestamps: true
+    timestamps: true // creates createdAt & updatedAt
   }
 );
 
 /**
  * Model creation
+ *
+ * This model is used throughout the application
+ * for CRUD operations on ingredients.
  */
 const Ingredient = mongoose.model("Ingredient", ingredientSchema);
 

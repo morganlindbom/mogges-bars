@@ -1,0 +1,85 @@
+/* filename: src/layout/Navbar/Navbar.module.css */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: #dee4fc;
+  border-bottom: 1px solid #ccc;
+}
+
+/* 🔥 huvudcontainer */
+.inner {
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* 🔥 vänster / höger */
+  align-items: center;
+  padding: 10px;
+}
+
+/* 🔥 grupper */
+
+.left {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: left;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.right {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: right;
+}
+
+/* 🔥 länkar */
+.link {
+  text-decoration: none;
+  color: black;
+  font-weight: normal;
+  transition:
+    color 0.15s ease,
+    transform 0.1s ease;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: #555;
+  transform: scale(1.05);
+}
+
+/* 🔥 aktiv sida */
+.active {
+  font-weight: bold;
+  color: blue;
+}
+
+/* 🔥 logout knapp */
+.logout {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 14px;
+  transition:
+    color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.logout:hover {
+  color: darkred;
+  transform: scale(1.05);
+}
+
+.logout:active {
+  transform: scale(0.95);
+}
