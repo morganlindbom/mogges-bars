@@ -1,16 +1,161 @@
-# React + Vite
+# Mogges Bars - Fullstack Lab
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Detta projekt är en fullstack-applikation för att skapa, hantera och jämföra bars/shakes utifrån ingredienser och näringsvärden.
 
-Currently, two official plugins are available:
+## Innehåll
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Autentisering (registrering/inloggning)
+- CRUD för ingredienser
+- Skapa/uppdatera recept
+- Statistik och jämförelse mellan recept
+- Beräkning av makron, vikt och pris
 
-## React Compiler
+## Teknikstack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
 
-## Expanding the ESLint configuration
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Recharts
+- CSS Modules
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend
+
+- Node.js
+- Express
+- MongoDB + Mongoose
+- JWT (auth-endpoints)
+
+## Projektstruktur
+
+```
+Bar_project/
+	backend/
+		src/
+			controllers/
+			middleware/
+			models/
+			routes/
+			services/
+			server.js
+	frontend/
+		src/
+			auth/
+			components/
+			layouts/
+			pages/
+			services/
+			types/
+			App.tsx
+```
+
+## Kom igång
+
+### 1. Installera dependencies
+
+I backend:
+
+```bash
+cd backend
+npm install
+```
+
+I frontend:
+
+```bash
+cd frontend
+npm install
+```
+
+### 2. Miljövariabler (backend)
+
+Skapa en `.env` i `backend` med:
+
+```env
+MONGO_URI=<din_mongodb_connection_string>
+JWT_SECRET=<din_jwt_hemlighet>
+PORT=3000
+```
+
+### 3. Starta backend
+
+```bash
+cd backend
+npm run dev
+```
+
+Backend körs på `http://localhost:3000`.
+
+### 4. Starta frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Frontend körs på Vites standardport (vanligtvis `http://localhost:5173`).
+
+## API-översikt
+
+### Auth
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+
+### Ingredients
+
+- `GET /api/ingredients`
+- `GET /api/ingredients/:id`
+- `POST /api/ingredients` (skyddad)
+- `PUT /api/ingredients/:id` (skyddad)
+- `DELETE /api/ingredients/:id` (skyddad)
+
+### Recipes
+
+- `GET /api/recipes`
+- `GET /api/recipes/:id`
+- `POST /api/recipes` (skyddad)
+- `PUT /api/recipes/:id` (skyddad)
+- `DELETE /api/recipes/:id` (skyddad)
+
+## Viktiga sidor i appen
+
+- `/home`
+- `/login`
+- `/register`
+- `/ingredients`
+- `/ingredients/add`
+- `/ingredients/:id/edit`
+- `/recipes`
+- `/recipes/:id/edit`
+- `/compare`
+- `/statistics`
+- `/bars`
+- `/shakes`
+
+## Build
+
+I frontend:
+
+```bash
+npm run build
+npm run preview
+```
+
+I backend (produktion):
+
+```bash
+npm start
+```
+
+## Labbnotering
+
+Projektet använder commit-typer enligt:
+
+- `feat` - ny funktion
+- `fix` - bugfix
+- `chore` - setup/config
+- `refactor` - kodändring utan ny funktion
+- `docs` - dokumentation
