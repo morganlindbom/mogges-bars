@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import shell from "./PageShell.module.css";
+import styles from "./Register.module.css";
 
 /**
  * Register page.
@@ -57,14 +57,14 @@ function Register() {
   }
 
   return (
-    <section className={shell.page}>
+    <section className={styles.page}>
       <h1>Create Account</h1>
 
-      <div className={shell.card}>
-        {error && <p className={shell.error}>{error}</p>}
+      <div className={styles.card}>
+        {error && <p className={styles.error}>{error}</p>}
 
-        <form onSubmit={handleSubmit} className={shell.formGrid}>
-          <label className={shell.field}>
+        <form onSubmit={handleSubmit} className={styles.formGrid}>
+          <label className={styles.field}>
             <span>Email</span>
             <input
               name="email"
@@ -76,7 +76,7 @@ function Register() {
             />
           </label>
 
-          <label className={shell.field}>
+          <label className={styles.field}>
             <span>Password</span>
             <input
               name="password"
@@ -88,8 +88,8 @@ function Register() {
             />
           </label>
 
-          <div className={shell.actions}>
-            <button className={shell.primaryButton} disabled={loading}>
+          <div className={styles.actions}>
+            <button className={styles.primaryButton} disabled={loading}>
               {loading ? "Creating..." : "Create Account"}
             </button>
           </div>

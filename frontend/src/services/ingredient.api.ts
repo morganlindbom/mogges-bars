@@ -4,8 +4,18 @@ import { Ingredient } from "@/types/Ingredient";
 
 const BASE_URL = "/api/ingredients";
 
+type CreateIngredientPayload = {
+  name: string;
+  calories: number;
+  carbs: number;
+  fat: number;
+  protein: number;
+  density: number;
+  pricePer1000g: number;
+};
+
 function getAuthHeaders() {
-/* Get auth headers.
+  /* Get auth headers.
 
    Detailed explanation:
    - Attach JWT token if available
@@ -18,8 +28,8 @@ function getAuthHeaders() {
   };
 }
 
-export async function getIngredients(): Promise<Ingredient[]> {
-/* Get ingredients.
+export async function getIngredients<T = Ingredient[]>(): Promise<T> {
+  /* Get ingredients.
 
    Detailed explanation:
    - Fetch all ingredients from backend
@@ -33,13 +43,18 @@ export async function getIngredients(): Promise<Ingredient[]> {
   return res.json();
 }
 
-export async function createIngredient(data: {
-  name: string;
-  calories: number;
-  density: number;
-  pricePer1000g: number;
-}) {
-/* Create ingredient.
+export async function getIngredientById(id: string): Promise<Ingredient> {
+  const res = await fetch(`${BASE_URL}/${id}`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch ingredient");
+  }
+
+  return res.json();
+}
+
+export async function createIngredient(data: CreateIngredientPayload) {
+  /* Create ingredient.
 
    Detailed explanation:
    - Send POST request to create ingredient
@@ -57,8 +72,30 @@ export async function createIngredient(data: {
   return res.json();
 }
 
+export async function updateIngredient(
+  id: string,
+  data: CreateIngredientPayload,
+) {
+  /* Update ingredient.
+
+   Detailed explanation:
+   - Send PUT request to update ingredient by ID
+*/
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update ingredient");
+  }
+
+  return res.json();
+}
+
 export async function deleteIngredient(id: string) {
-/* Delete ingredient.
+  /* Delete ingredient.
 
    Detailed explanation:
    - Remove ingredient by ID

@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { createIngredient } from "@/services/ingredient.api";
 import { useAuth } from "@/auth/useAuth";
-import { IngredientAdd } from "@/types";
-import shell from "@/pages/PageShell.module.css";
+import { AddIngredient } from "@/types";
+import styles from "./IngredientForm.module.css";
 
 type Props = Readonly<{
   onSuccess: () => void;
 }>;
 
-const initialForm: IngredientAdd = {
+const initialForm: AddIngredient = {
   name: "",
   calories: "",
   carbs: "",
@@ -23,17 +23,17 @@ const initialForm: IngredientAdd = {
 export default function IngredientForm({ onSuccess }: Props) {
   const { token } = useAuth();
 
-  const [form, setForm] = useState<IngredientAdd>(initialForm);
+  const [form, setForm] = useState<AddIngredient>(initialForm);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!token) {
     return (
-      <p className={shell.muted}>You must be logged in to add ingredients.</p>
+      <p className={styles.muted}>You must be logged in to add ingredients.</p>
     );
   }
 
-  function updateField(key: keyof IngredientAdd, value: string) {
+  function updateField(key: keyof AddIngredient, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
@@ -86,8 +86,8 @@ export default function IngredientForm({ onSuccess }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={shell.formGrid}>
-      <label className={shell.field} htmlFor="ingredient-name">
+    <form onSubmit={handleSubmit} className={styles.formGrid}>
+      <label className={styles.field} htmlFor="ingredient-name">
         <span>Name</span>
         <input
           id="ingredient-name"
@@ -97,7 +97,7 @@ export default function IngredientForm({ onSuccess }: Props) {
         />
       </label>
 
-      <label className={shell.field} htmlFor="ingredient-calories">
+      <label className={styles.field} htmlFor="ingredient-calories">
         <span>Calories (per 100g)</span>
         <input
           id="ingredient-calories"
@@ -109,7 +109,7 @@ export default function IngredientForm({ onSuccess }: Props) {
         />
       </label>
 
-      <label className={shell.field} htmlFor="ingredient-carbs">
+      <label className={styles.field} htmlFor="ingredient-carbs">
         <span>Carbs (per 100g)</span>
         <input
           id="ingredient-carbs"
@@ -121,7 +121,7 @@ export default function IngredientForm({ onSuccess }: Props) {
         />
       </label>
 
-      <label className={shell.field} htmlFor="ingredient-fat">
+      <label className={styles.field} htmlFor="ingredient-fat">
         <span>Fat (per 100g)</span>
         <input
           id="ingredient-fat"
@@ -133,7 +133,7 @@ export default function IngredientForm({ onSuccess }: Props) {
         />
       </label>
 
-      <label className={shell.field} htmlFor="ingredient-protein">
+      <label className={styles.field} htmlFor="ingredient-protein">
         <span>Protein (per 100g)</span>
         <input
           id="ingredient-protein"
@@ -145,7 +145,7 @@ export default function IngredientForm({ onSuccess }: Props) {
         />
       </label>
 
-      <label className={shell.field} htmlFor="ingredient-density">
+      <label className={styles.field} htmlFor="ingredient-density">
         <span>Density</span>
         <input
           id="ingredient-density"
@@ -157,7 +157,7 @@ export default function IngredientForm({ onSuccess }: Props) {
         />
       </label>
 
-      <label className={shell.field} htmlFor="ingredient-price">
+      <label className={styles.field} htmlFor="ingredient-price">
         <span>Price per 1000g</span>
         <input
           id="ingredient-price"
@@ -169,16 +169,16 @@ export default function IngredientForm({ onSuccess }: Props) {
         />
       </label>
 
-      <div className={shell.actions}>
+      <div className={styles.actions}>
         <button
-          className={shell.primaryButton}
+          className={styles.primaryButton}
           type="submit"
           disabled={submitting}
         >
           {submitting ? "Adding..." : "Add Ingredient"}
         </button>
 
-        {error && <p className={shell.error}>{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
       </div>
     </form>
   );

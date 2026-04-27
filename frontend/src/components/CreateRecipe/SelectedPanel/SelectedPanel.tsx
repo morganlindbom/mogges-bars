@@ -3,13 +3,13 @@
 import styles from "./SelectedPanel.module.css";
 import { SelectedIngredient } from "@/types/SelectedIngredient";
 
-type Props = {
+type Props = Readonly<{
   items: SelectedIngredient[];
   onChange: (items: SelectedIngredient[]) => void;
-};
+}>;
 
-function SelectedPanel({ items = [], onChange }: Props) {
-/* Selected panel.
+function SelectedPanel({ items, onChange }: Props) {
+  /* Selected panel.
 
    Detailed explanation:
    - Uses ONLY SelectedIngredient
@@ -17,7 +17,7 @@ function SelectedPanel({ items = [], onChange }: Props) {
 
   function handleChange(index: number, value: number) {
     const updated = items.map((item, i) =>
-      i === index ? { ...item, grams: value } : item
+      i === index ? { ...item, grams: value } : item,
     );
 
     onChange(updated);
@@ -39,24 +39,40 @@ function SelectedPanel({ items = [], onChange }: Props) {
       <table className={styles.table}>
         <tbody>
           {items.map((item, index) => (
-            <tr key={item.ingredientId}>
+            <tr key={`${item.ingredientId}-${index}`}>
               <td>{item.name}</td>
 
               <td>
-                <input
-                  className={styles.input}
-                  type="number"
-                  value={item.grams}
-                  onChange={(e) =>
-                    handleChange(index, Number(e.target.value))
-                  }
-                />
+                <div className={styles.gramInput}>
+                  <input
+                    className={styles.input}
+                    type="text"
+                    aria-label={`Grams for ${item.name}`}
+                    value={item.grams}
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      // allow empty input (important for UX)
+                      if (value === "") {
+                        handleChange(index, 0);
+                        return;
+                      }
+
+                      // convert to number safely
+                      const parsed = Number(value);
+
+                      // only update if valid number
+                      if (!Number.isNaN(parsed)) {
+                        handleChange(index, parsed);
+                      }
+                    }}
+                  />
+                  <span>gram</span>
+                </div>
               </td>
 
               <td>
-                <button onClick={() => handleRemove(index)}>
-                  ❌
-                </button>
+                <button onClick={() => handleRemove(index)}>❌</button>
               </td>
             </tr>
           ))}

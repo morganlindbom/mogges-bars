@@ -1,0 +1,141 @@
+/* filename: src/pages/Statistics.module.css */
+
+/* ===== PAGE ===== */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 100%;
+}
+
+/* ===== GRID ===== */
+.container {
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr 1fr 1fr;
+  gap: 5px; /* space between the four top cards */
+  margin-bottom: 0px; /* space below the grid before Analysis */
+  height: 40%;
+}
+
+/* ===== CARD (top four panels) ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border); /* visible border around each card */
+  border-radius: 10px;
+  padding: 10px;
+}
+.chartArea :global(.recharts-cartesian-axis-tick-value) {
+  font-size: 10px; /* smaller ticks */
+}
+
+.chartArea :global(.recharts-legend-wrapper),
+.chartArea :global(.recharts-legend-item-text) {
+  font-size: 9px; /* smaller legend */
+}
+
+.chartArea :global(.recharts-default-tooltip) {
+  font-size: 10px; /* slightly smaller tooltip */
+}
+
+/* Optional: shrink generic SVG text inside charts if present */
+.chartArea :global(.recharts-text tspan) {
+  font-size: 7px;
+}
+
+/* ===== CHECKLIST ===== */
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== CHART ===== */
+.chartArea {
+  height: 120px;
+}
+
+/* ===== ANALYSIS ===== */
+.analysisCard {
+  margin-top: 0px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  /* Fix the card height so inner content can scroll */
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden; /* contain inner scroll region */
+
+}
+
+.tableWrap {
+  overflow: auto; /* both axes if needed */
+  margin-top: 5px;
+  flex: 1;
+  min-height: 0; /* allow child to shrink inside flex container */
+}
+
+/* ===== TABLE ===== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.table th,
+.table td {
+  padding: 6px;
+  /* Horizontal row separator */
+  border-bottom: 1px solid var(--border);
+  /* Vertical column separator */
+  border-right: 1px solid var(--border);
+}
+
+.table th {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Remove extra right border on the last column */
+.table th:last-child,
+.table td:last-child {
+  border-right: none;
+}
+
+/* ===== TEXT ===== */
+.note {
+  margin-top: 10px;
+  color: var(--text-muted);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.error {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}

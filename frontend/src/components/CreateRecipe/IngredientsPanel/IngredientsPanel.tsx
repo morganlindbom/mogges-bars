@@ -4,13 +4,13 @@ import { useState } from "react";
 import styles from "./IngredientsPanel.module.css";
 import { Ingredient } from "@/types/Ingredient";
 
-type Props = {
+type Props = Readonly<{
   ingredients: Ingredient[];
   onAdd: (ingredient: Ingredient) => void;
-};
+}>;
 
-function IngredientsPanel({ ingredients = [], onAdd }: Props) {
-/* Ingredients panel.
+function IngredientsPanel({ ingredients, onAdd }: Props) {
+  /* Ingredients panel.
 
    Detailed explanation:
    - Uses ONLY Ingredient type
@@ -19,19 +19,20 @@ function IngredientsPanel({ ingredients = [], onAdd }: Props) {
   const [search, setSearch] = useState("");
 
   const filtered = ingredients.filter((ing) =>
-    ing.name.toLowerCase().includes(search.toLowerCase())
+    ing.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.inner}>
-
         <div className={styles.header}>
           <h3 className={styles.title}>Ingredients</h3>
 
           <input
             className={styles.search}
             type="text"
+            aria-label="Search ingredients"
+            placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -52,7 +53,6 @@ function IngredientsPanel({ ingredients = [], onAdd }: Props) {
             <p className={styles.empty}>No ingredients found</p>
           )}
         </div>
-
       </div>
     </div>
   );

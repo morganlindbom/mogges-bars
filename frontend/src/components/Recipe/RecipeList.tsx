@@ -2,7 +2,7 @@
 
 import { Recipe } from "@/types/Recipe";
 import RecipeRow from "./RecipeRow";
-import shell from "@/pages/PageShell.module.css";
+import styles from "./RecipeList.module.css";
 
 type Props = {
   recipes: Recipe[];
@@ -11,12 +11,12 @@ type Props = {
 
 export default function RecipeList({ recipes, onRefresh }: Props) {
   if (recipes.length === 0) {
-    return <p className={shell.muted}>No recipes found.</p>;
+    return <p className={styles.muted}>No recipes found.</p>;
   }
 
   return (
-    <div className={shell.tableWrap}>
-      <table className={shell.table}>
+    <div className={styles.tableWrap}>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>Name</th>

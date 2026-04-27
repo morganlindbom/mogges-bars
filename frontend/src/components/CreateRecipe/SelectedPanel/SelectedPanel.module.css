@@ -38,6 +38,12 @@
   border: 1px solid var(--border);
 }
 
+.gramInput {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .button {
   border: 1px solid #e4b0b0;
   border-radius: 8px;

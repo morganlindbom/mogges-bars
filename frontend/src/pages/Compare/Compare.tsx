@@ -4,20 +4,13 @@ import { useEffect, useState } from "react";
 import { Recipe } from "@/types/Recipe";
 import { getRecipes } from "@/services/recipe.api";
 import { getIngredients } from "@/services/ingredient.api";
-import shell from "./PageShell.module.css";
+import styles from "./Compare.module.css";
 
 type Ingredient = {
   _id: string;
   pricePer1000g: number;
 };
 
-/**
- * Compare page.
- *
- * Allows selecting multiple recipes and comparing:
- * - price
- * - macros
- */
 function Compare() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -56,9 +49,7 @@ function Compare() {
   function calculatePrice(recipe: Recipe) {
     return recipe.ingredients.reduce((sum, item) => {
       const ing = ingredients.find((i) => i._id === item.ingredientId);
-
       if (!ing) return sum;
-
       return sum + (ing.pricePer1000g / 1000) * item.grams;
     }, 0);
   }
@@ -67,33 +58,33 @@ function Compare() {
 
   if (loading) {
     return (
-      <section className={shell.page}>
+      <section className={styles.page}>
         <h1>Compare Recipes</h1>
-        <p className={shell.muted}>Loading...</p>
+        <p className={styles.muted}>Loading...</p>
       </section>
     );
   }
 
   if (error) {
     return (
-      <section className={shell.page}>
+      <section className={styles.page}>
         <h1>Compare Recipes</h1>
-        <p className={shell.error}>{error}</p>
+        <p className={styles.error}>{error}</p>
       </section>
     );
   }
 
   return (
-    <section className={shell.page}>
+    <section className={styles.page}>
       <h1>Compare Recipes</h1>
 
-      <div className={shell.gridTwo}>
-        <div className={shell.card}>
+      <div className={styles.panelGrid}>
+        <article className={styles.card}>
           <h2>Select Recipes</h2>
 
-          <div className={shell.checklist}>
+          <div className={styles.checklist}>
             {recipes.map((r) => (
-              <label key={r._id} className={shell.checkItem}>
+              <label key={r._id} className={styles.checkItem}>
                 <input
                   type="checkbox"
                   checked={selected.includes(r._id)}
@@ -103,18 +94,18 @@ function Compare() {
               </label>
             ))}
           </div>
-        </div>
+        </article>
 
-        <div className={shell.card}>
+        <article className={styles.card}>
           <h2>Comparison</h2>
 
           {selectedRecipes.length === 0 ? (
-            <p className={shell.muted}>
+            <p className={styles.muted}>
               Select one or more recipes to compare.
             </p>
           ) : (
-            <div className={shell.tableWrap}>
-              <table className={shell.table}>
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -140,7 +131,7 @@ function Compare() {
               </table>
             </div>
           )}
-        </div>
+        </article>
       </div>
     </section>
   );

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/auth/useAuth";
-import shell from "./PageShell.module.css";
+import styles from "./Login.module.css";
 
 /**
  * Login page.
@@ -88,14 +88,14 @@ function Login() {
    * Render UI.
    */
   return (
-    <section className={shell.page}>
+    <section className={styles.page}>
       <h1>Login</h1>
 
-      <div className={shell.card}>
-        {error && <p className={shell.error}>{error}</p>}
+      <div className={styles.card}>
+        {error && <p className={styles.error}>{error}</p>}
 
-        <form onSubmit={handleSubmit} className={shell.formGrid}>
-          <label className={shell.field}>
+        <form onSubmit={handleSubmit} className={styles.formGrid}>
+          <label className={styles.field}>
             <span>Email</span>
             <input
               name="email"
@@ -107,7 +107,7 @@ function Login() {
             />
           </label>
 
-          <label className={shell.field}>
+          <label className={styles.field}>
             <span>Password</span>
             <input
               name="password"
@@ -119,9 +119,9 @@ function Login() {
             />
           </label>
 
-          <div className={shell.actions}>
+          <div className={styles.actions}>
             <button
-              className={shell.primaryButton}
+              className={styles.primaryButton}
               type="submit"
               disabled={loading}
             >
@@ -130,7 +130,7 @@ function Login() {
           </div>
         </form>
 
-        <p className={shell.muted}>
+        <p className={styles.muted}>
           Don't have an account? <Link to="/register">Create one</Link>
         </p>
       </div>

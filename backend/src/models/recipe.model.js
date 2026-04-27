@@ -1,60 +1,53 @@
-// filename: src/models/recipe.model.js
-
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
-/**
- * Recipe schema
- *
- * Unified model for both bars and shakes.
- * Controlled via "type".
- */
-const recipeSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      trim: true
-    },
+/* Embedded ingredient snapshot.
 
-    type: {
-      type: String,
-      enum: ["bar", "shake"],
-      required: true
-    },
-
-    ingredients: [
-      {
-        ingredientId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Ingredient",
-          required: true
-        },
-        grams: {
-          type: Number,
-          required: true,
-          min: 0
-        }
-      }
-    ],
-
-    totalWeight: {
-      type: Number,
-      required: true
-    },
-
-    calories: Number,
-    protein: Number,
-    carbs: Number,
-    fat: Number,
-
-    author: {
-      type: String,
-      required: true
-    }
+   Detailed explanation:
+   - Keeps ObjectId reference (lab requirement)
+   - Stores full ingredient data for performance
+*/
+const recipeIngredientSchema = new Schema({
+  ingredientId: {
+    type: Schema.Types.ObjectId,
+    ref: "Ingredient",
+    required: true
   },
+
+  name: { type: String, required: true },
+
+  grams: { type: Number, required: true },
+
+  calories: { type: Number, required: true },
+  protein: { type: Number, required: true },
+  carbs: { type: Number, required: true },
+  fat: { type: Number, required: true }
+});
+
+/* Recipe schema.
+
+   Detailed explanation:
+   - Full recipe with calculated totals
+*/
+const recipeSchema = new Schema(
   {
-    timestamps: true
-  }
+    name: { type: String, required: true },
+    type: { type: String, enum: ["bar", "shake"], required: true },
+
+    ingredients: [recipeIngredientSchema],
+
+    totalWeight: { type: Number, required: true },
+
+    calories: { type: Number, required: true },
+    protein: { type: Number, required: true },
+    carbs: { type: Number, required: true },
+    fat: { type: Number, required: true },
+
+    author: { type: String, required: true }
+  },
+  { timestamps: true }
 );
 
-export default mongoose.model("Recipe", recipeSchema);
+const Recipe = mongoose.model("Recipe", recipeSchema);
+
+export default Recipe;

@@ -1,6 +1,6 @@
-// filename: src/types/IngredientAdd.ts
+// filename: src/types/AddIngredient.ts
 
-export type IngredientAdd = {
+export type AddIngredient = {
   name: string;
   calories: string;
   carbs: string;

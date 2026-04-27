@@ -5,7 +5,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { AuthProvider } from "@/auth/AuthContext";
 
-import "./index.css";
+import "./main.css";
+// global.page.css has been migrated into per-page CSS modules and removed
 
 const rootElement = document.getElementById("root");
 

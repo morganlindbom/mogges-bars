@@ -1,5 +1,60 @@
+/* ===== PAGE ===== */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Fill available space inside MainLayout and allow inner flex items to scroll */
+  flex: 1;
+  min-height: 0;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Card that contains the table */
 .tableCard {
   gap: 12px;
   display: flex;
   flex-direction: column;
+  /* Fill available vertical space and let inner table scroll */
+  flex: 1;
+  min-height: 0;
+}
+
+/* ===== ACTIONS / BUTTONS ===== */
+.actions {
+  display: flex;
+  padding: 10px;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.primaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ===== TEXT ===== */
+.muted {
+  color: var(--text-muted);
+}
+.error {
+  color: var(--danger);
+  font-weight: 500;
 }

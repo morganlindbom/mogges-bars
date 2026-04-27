@@ -2,24 +2,43 @@
 
 import { Recipe } from "@/types/Recipe";
 
+type RecipeType = "bar" | "shake";
+
+type GetRecipesOptions = {
+  type?: RecipeType;
+};
+
 export type RecipeIngredientInput = {
-/* Recipe ingredient input.
+  /* Recipe ingredient input.
 
    Detailed explanation:
-   - Backend contract for ingredient inside recipe
-*/
+   - Represents one ingredient in a recipe
+   - Links ingredientId with grams
+  */
   ingredientId: string;
   grams: number;
 };
 
 export type CreateRecipePayload = {
-/* Create recipe payload.
+  /* Create recipe payload.
 
    Detailed explanation:
-   - Payload for POST request
-*/
+   - Used for POST
+  */
   name: string;
-  type: "bar" | "shake";
+  type: RecipeType;
+  ingredients: RecipeIngredientInput[];
+};
+
+export type UpdateRecipePayload = {
+  /* Update recipe payload.
+
+   Detailed explanation:
+   - Used for PUT/PATCH
+   - Same structure as create
+  */
+  name: string;
+  type: RecipeType;
   ingredients: RecipeIngredientInput[];
 };
 
@@ -29,8 +48,9 @@ function getAuthHeaders() {
 /* Get auth headers.
 
    Detailed explanation:
-   - Attach JWT token if available
+   - Attaches JWT if exists
 */
+
   const token = localStorage.getItem("token");
 
   return {
@@ -39,17 +59,46 @@ function getAuthHeaders() {
   };
 }
 
-export async function getRecipes(): Promise<Recipe[]> {
-/* Get recipes.
+export async function getRecipes<T = Recipe[]>(
+  options: GetRecipesOptions = {},
+): Promise<T> {
+/* Fetch all recipes.
 
    Detailed explanation:
-   - Fetch all recipes from backend
+   - Supports filtering by type
 */
 
-  const res = await fetch(BASE_URL);
+  const params = new URLSearchParams();
+
+  if (options.type) {
+    params.set("type", options.type);
+  }
+
+  const url = params.size > 0
+    ? `${BASE_URL}?${params.toString()}`
+    : BASE_URL;
+
+  const res = await fetch(url);
 
   if (!res.ok) {
     throw new Error("Failed to fetch recipes");
+  }
+
+  return res.json();
+}
+
+export async function getRecipeById(id: string): Promise<Recipe> {
+/* Fetch single recipe.
+
+   Detailed explanation:
+   - Used in edit page
+   - Returns full recipe object
+*/
+
+  const res = await fetch(`${BASE_URL}/${id}`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch recipe");
   }
 
   return res.json();
@@ -59,7 +108,7 @@ export async function createRecipe(data: CreateRecipePayload) {
 /* Create recipe.
 
    Detailed explanation:
-   - Send POST request with correct payload
+   - POST new recipe
 */
 
   const res = await fetch(BASE_URL, {
@@ -75,11 +124,32 @@ export async function createRecipe(data: CreateRecipePayload) {
   return res.json();
 }
 
+export async function updateRecipe(id: string, data: UpdateRecipePayload) {
+/* Update recipe.
+
+   Detailed explanation:
+   - PUT request to update existing recipe
+   - Required for edit functionality
+*/
+
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "PUT", // or PATCH depending on backend
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update recipe");
+  }
+
+  return res.json();
+}
+
 export async function deleteRecipe(id: string) {
 /* Delete recipe.
 
    Detailed explanation:
-   - Remove recipe by ID
+   - Removes recipe from database
 */
 
   const res = await fetch(`${BASE_URL}/${id}`, {

@@ -1,0 +1,22 @@
+/* filename: src/pages/Bars.module.css */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+.error {
+  color: var(--danger);
+  font-weight: 500;
+}

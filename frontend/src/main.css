@@ -1,4 +1,4 @@
-/* filename: src/index.css */
+/* filename: src/main.css */
 
 :root {
   --text: #162030;
@@ -28,6 +28,7 @@ body,
 body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
   color: var(--text);
   background: linear-gradient(180deg, #f8f9fd 0%, #edf2fb 100%);
 }

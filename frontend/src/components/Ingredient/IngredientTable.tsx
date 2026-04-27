@@ -2,7 +2,7 @@
 
 import { Ingredient } from "@/types/Ingredient";
 import IngredientRow from "./IngredientRow";
-import shell from "@/pages/PageShell.module.css";
+import styles from "./IngredientTable.module.css";
 
 type Props = Readonly<{
   ingredients: Ingredient[];
@@ -11,12 +11,12 @@ type Props = Readonly<{
 
 export default function IngredientTable({ ingredients, onRefresh }: Props) {
   if (ingredients.length === 0) {
-    return <p className={shell.muted}>No ingredients found.</p>;
+    return <p className={styles.muted}>No ingredients found.</p>;
   }
 
   return (
-    <div className={shell.tableWrap}>
-      <table className={shell.table}>
+    <div className={styles.tableWrap}>
+      <table className={`${styles.table} ${styles.compact}`}>
         <thead>
           <tr>
             <th>Name</th>

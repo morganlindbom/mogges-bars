@@ -1,0 +1,60 @@
+/* filename: src/components/Ingredient/IngredientTable.module.css */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th,
+.table td {
+  padding: 6px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Keep header row visible when scrolling vertically */
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 3;
+}
+
+/* Keep the first column (Name) visible when scrolling horizontally */
+.table th:first-child,
+.table td:first-child {
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+  z-index: 2;
+  text-align: left; /* name column left-aligned for readability */
+}
+
+.table th {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Compact variant for denser rows on Ingredients */
+.compact td {
+  font-size: 0.75rem;
+  padding: 4px 6px;
+  line-height: 1.2;
+}
+
+.compact th {
+  font-size: 0.8rem;
+  padding: 4px 6px;
+  line-height: 1.2;
+}
+
+.tableWrap {
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}

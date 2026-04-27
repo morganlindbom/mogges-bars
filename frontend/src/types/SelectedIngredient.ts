@@ -1,9 +1,7 @@
 // filename: src/types/SelectedIngredient.ts
 
-import { Ingredient } from "./Ingredient";
-
 export type SelectedIngredient = {
-/* Selected ingredient.
+  /* Selected ingredient.
 
    Detailed explanation:
    - UI-specific ingredient with grams
@@ -13,6 +11,9 @@ export type SelectedIngredient = {
 
   name: string;
   calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
 
   grams: number;
 };

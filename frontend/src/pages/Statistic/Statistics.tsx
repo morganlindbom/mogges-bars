@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Recipe } from "@/types/Recipe";
 import styles from "./Statistics.module.css";
-import shell from "./PageShell.module.css";
 import { getRecipes } from "@/services/recipe.api";
 import { getIngredients } from "@/services/ingredient.api";
 
@@ -12,6 +11,7 @@ import {
   Bar,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
@@ -26,11 +26,14 @@ type Ingredient = {
   pricePer1000g: number;
 };
 
-/**
- * Statistics page.
- *
- * All analysis is recalculated per 100g from ingredients.
- */
+/* Statistics page.
+
+   Detailed explanation:
+   - Loads recipes and ingredients
+   - Allows selection of recipes
+   - Calculates nutrition per 100g
+   - Displays charts and table
+*/
 function Statistics() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -39,9 +42,15 @@ function Statistics() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    /* Load data on mount.
+
+   Detailed explanation:
+   - Fetch recipes and ingredients in parallel
+*/
     async function load() {
       try {
         setLoading(true);
+
         const [recipeData, ingredientData] = await Promise.all([
           getRecipes<Recipe[]>(),
           getIngredients<Ingredient[]>(),
@@ -61,12 +70,16 @@ function Statistics() {
   }, []);
 
   function toggle(id: string) {
+    /* Toggle selected recipe */
+
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   }
 
   function calculatePer100(recipe: Recipe) {
+    /* Calculate nutrition per 100g */
+
     const totals = {
       calories: 0,
       protein: 0,
@@ -124,39 +137,40 @@ function Statistics() {
 
   if (loading) {
     return (
-      <section className={shell.page}>
+      <section className={styles.page}>
         <h1>Statistics</h1>
-        <p className={shell.muted}>Loading...</p>
+        <p className={styles.muted}>Loading...</p>
       </section>
     );
   }
 
   if (error) {
     return (
-      <section className={shell.page}>
+      <section className={styles.page}>
         <h1>Statistics</h1>
-        <p className={shell.error}>{error}</p>
+        <p className={styles.error}>{error}</p>
       </section>
     );
   }
 
   return (
-    <section className={shell.page}>
-      <h1>Statistics</h1>
+    <section className={styles.page}>
 
+      {/* TOP GRID */}
       <div className={styles.container}>
-        <div className={shell.card}>
+        <div className={styles.card}>
+          <h1>Statistics</h1>
           <h2>Overview</h2>
           <p>Total recipes: {recipes.length}</p>
           <p>Selected recipes: {selectedRecipes.length}</p>
         </div>
 
-        <div className={shell.card}>
+        <div className={styles.card}>
           <h2>Select Recipes</h2>
 
-          <div className={shell.checklist}>
+          <div className={styles.checklist}>
             {recipes.map((r) => (
-              <label key={r._id} className={shell.checkItem}>
+              <label key={r._id} className={styles.checkItem}>
                 <input
                   type="checkbox"
                   checked={selected.includes(r._id)}
@@ -168,41 +182,68 @@ function Statistics() {
           </div>
         </div>
 
-        <div className={shell.card}>
-          <h2>Macro Comparison (per 100g)</h2>
+        <div className={styles.card}>
+          <h2>Macro Comparison</h2>
 
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={macroData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="protein" fill="#3ca661" />
-              <Bar dataKey="carbs" fill="#3b78d8" />
-              <Bar dataKey="fat" fill="#d9534f" />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className={styles.chartArea}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={macroData}>
+                <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  dataKey="protein"
+                  fill="#3ca661"
+                  stroke="#cbd5e1"
+                  strokeWidth={1}
+                />
+                <Bar
+                  dataKey="carbs"
+                  fill="#3b78d8"
+                  stroke="#cbd5e1"
+                  strokeWidth={1}
+                />
+                <Bar
+                  dataKey="fat"
+                  fill="#d9534f"
+                  stroke="#cbd5e1"
+                  strokeWidth={1}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        <div className={shell.card}>
-          <h2>Price Comparison (per 100g)</h2>
+        <div className={styles.card}>
+          <h2>Price Comparison</h2>
 
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={priceData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="price" fill="#6f55b8" />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className={styles.chartArea}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={priceData}>
+                <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar
+                  dataKey="price"
+                  fill="#6f55b8"
+                  stroke="#cbd5e1"
+                  strokeWidth={1}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      <div className={shell.card}>
+      {/* ANALYSIS */}
+      <div className={styles.analysisCard}>
         <h2>Analysis (per 100g)</h2>
 
-        <div className={shell.tableWrap}>
-          <table className={shell.table}>
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
             <thead>
               <tr>
                 <th>Name</th>
@@ -210,7 +251,7 @@ function Statistics() {
                 <th>Carbs</th>
                 <th>Fat</th>
                 <th>Protein</th>
-                <th>Price (kr)</th>
+                <th>Price</th>
               </tr>
             </thead>
 
@@ -234,9 +275,7 @@ function Statistics() {
           </table>
         </div>
 
-        <p className={styles.note}>
-          All values are recalculated per 100g directly from ingredients.
-        </p>
+        <p className={styles.note}>All values are recalculated per 100g.</p>
       </div>
     </section>
   );

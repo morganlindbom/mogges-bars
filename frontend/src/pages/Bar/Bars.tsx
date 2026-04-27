@@ -1,59 +1,59 @@
-// filename: src/pages/Shakes.tsx
+// filename: src/pages/Bars.tsx
 
 import { useEffect, useState } from "react";
 import { getRecipes } from "@/services/recipe.api";
 import RecipeList from "@/components/Recipe/RecipeList";
 import { Recipe } from "@/types/Recipe";
-import shell from "./PageShell.module.css";
+import styles from "./Bars.module.css";
 
-export default function Shakes() {
+export default function Bars() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  async function fetchShakes() {
+  async function fetchBars() {
     try {
       setLoading(true);
 
-      const shakes = await getRecipes<Recipe[]>({ type: "shake" });
+      const bars = await getRecipes<Recipe[]>({ type: "bar" });
 
-      setRecipes(shakes);
+      setRecipes(bars);
       setError(null);
     } catch {
-      setError("Failed to fetch shakes");
+      setError("Failed to fetch bars");
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchShakes();
+    fetchBars();
   }, []);
 
   if (loading) {
     return (
-      <section className={shell.page}>
-        <h1>Shakes</h1>
-        <p className={shell.muted}>Loading...</p>
+      <section className={styles.page}>
+        <h1>Bars</h1>
+        <p className={styles.muted}>Loading...</p>
       </section>
     );
   }
 
   if (error) {
     return (
-      <section className={shell.page}>
-        <h1>Shakes</h1>
-        <p className={shell.error}>{error}</p>
+      <section className={styles.page}>
+        <h1>Bars</h1>
+        <p className={styles.error}>{error}</p>
       </section>
     );
   }
 
   return (
-    <section className={shell.page}>
-      <h1>Shakes</h1>
+    <section className={styles.page}>
+      <h1>Bars</h1>
 
-      <div className={shell.card}>
-        <RecipeList recipes={recipes} onRefresh={fetchShakes} />
+      <div className={styles.card}>
+        <RecipeList recipes={recipes} onRefresh={fetchBars} />
       </div>
     </section>
   );

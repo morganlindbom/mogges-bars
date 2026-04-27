@@ -1,11 +1,186 @@
-.panelGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+/* filename: frontend/src/pages/Recipes/RecipesPage.module.css */
+
+/* ==============================
+   PAGE
+   ============================== */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  padding: 6px; /* 🔥 mindre */
+  gap: 6px;     /* 🔥 mindre */
+
+  overflow: hidden; /* 🔥 viktigt */
 }
 
+/* ==============================
+   TITLE
+   ============================== */
+.page h1 {
+  margin: 0;
+  font-size: 1.5rem; /* 🔥 mindre */
+}
+
+/* ==============================
+   FORM
+   ============================== */
+.formCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  padding: 8px; /* 🔥 mindre */
+  box-shadow: var(--shadow);
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  max-height: 90px; /* 🔥 kraftigt reducerad */
+}
+
+/* ==============================
+   FORM GRID
+   ============================== */
+.formGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 6px; /* 🔥 mindre */
+  align-items: end;
+}
+
+/* ==============================
+   FIELD
+   ============================== */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* 🔥 mindre */
+}
+
+.field span {
+  font-size: 0.75rem; /* 🔥 mindre */
+}
+
+/* ==============================
+   INPUTS
+   ============================== */
+.field input,
+.field select {
+  height: 30px; /* 🔥 mindre */
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  padding: 0 8px;
+}
+
+/* ==============================
+   BUTTON
+   ============================== */
+.buttonWrapper {
+  display: flex;
+  align-items: flex-end;
+}
+
+.primaryButton {
+  height: 30px; /* 🔥 match input */
+  padding: 0 14px;
+
+  border-radius: 999px;
+  border: none;
+
+  background: var(--accent);
+  color: white;
+
+  font-size: 0.85rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+/* ==============================
+   STATUS
+   ============================== */
+.statusRow {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+}
+
+/* ==============================
+   PANEL GRID
+   ============================== */
+.panelGrid {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  /* 🔥 exakt höjdstyrning */
+  grid-template-rows: 1fr 1fr;
+
+  gap: 6px; /* 🔥 mindre */
+
+  min-height: 0;
+}
+
+/* ==============================
+   PANEL
+   ============================== */
+.panel {
+  display: flex;
+  flex-direction: column;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  padding: 6px; /* 🔥 mindre */
+
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ==============================
+   PANEL CONTENT
+   ============================== */
+.panel > * {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* ==============================
+   TEXT
+   ============================== */
+.muted {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.error {
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+.success {
+  font-size: 0.8rem;
+  color: #2ecc71;
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
 @media (max-width: 900px) {
   .panelGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formGrid {
     grid-template-columns: 1fr;
   }
 }
