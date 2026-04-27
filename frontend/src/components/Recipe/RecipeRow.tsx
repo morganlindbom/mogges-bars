@@ -12,7 +12,7 @@ type Props = Readonly<{
 }>;
 
 export default function RecipeRow({ recipe, onRefresh }: Props) {
-/* Recipe row component.
+  /* Recipe row component.
 
    Detailed explanation:
    - Displays recipe data
@@ -24,13 +24,21 @@ export default function RecipeRow({ recipe, onRefresh }: Props) {
   const navigate = useNavigate();
 
   function handleEdit() {
-/* Navigate to edit page */
+    /* Navigate to edit page */
 
     navigate(`/recipes/${recipe._id}/edit`);
   }
 
   async function handleDelete() {
-/* Delete recipe */
+    /* Delete recipe */
+
+    const confirmed = globalThis.confirm(
+      `Delete recipe "${recipe.name}"? This cannot be undone.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
 
     try {
       await deleteRecipe(recipe._id);

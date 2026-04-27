@@ -28,6 +28,14 @@ export default function Shakes() {
 
   useEffect(() => {
     fetchShakes();
+
+    const intervalId = globalThis.setInterval(() => {
+      fetchShakes();
+    }, 30000);
+
+    return () => {
+      globalThis.clearInterval(intervalId);
+    };
   }, []);
 
   if (loading) {

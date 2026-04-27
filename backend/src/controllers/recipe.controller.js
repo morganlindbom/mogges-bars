@@ -8,6 +8,34 @@ import {
   deleteRecipeService
 } from "../services/recipe.service.js";
 
+function validateRecipeInput(body) {
+  const { name, type, ingredients } = body;
+
+  if (!name || typeof name !== "string" || !name.trim()) {
+    return "Field 'name' is required.";
+  }
+
+  if (type !== "bar" && type !== "shake") {
+    return "Field 'type' must be either 'bar' or 'shake'.";
+  }
+
+  if (!Array.isArray(ingredients) || ingredients.length === 0) {
+    return "Field 'ingredients' must be a non-empty array.";
+  }
+
+  for (const item of ingredients) {
+    if (!item || typeof item.ingredientId !== "string" || !item.ingredientId) {
+      return "Each ingredient must include a valid 'ingredientId'.";
+    }
+
+    if (typeof item.grams !== "number" || Number.isNaN(item.grams) || item.grams <= 0) {
+      return "Each ingredient must include 'grams' > 0.";
+    }
+  }
+
+  return null;
+}
+
 /* Get all recipes with optional filter */
 export async function getRecipes(req, res) {
 /* Get recipes.
@@ -66,6 +94,11 @@ export async function createRecipe(req, res) {
 */
 
   try {
+    const validationError = validateRecipeInput(req.body);
+    if (validationError) {
+      return res.status(400).json({ error: validationError });
+    }
+
     const userEmail = req.user?.email;
 
     const recipe = await createRecipeService(req.body, userEmail);
@@ -89,6 +122,11 @@ export async function updateRecipe(req, res) {
 */
 
   try {
+    const validationError = validateRecipeInput(req.body);
+    if (validationError) {
+      return res.status(400).json({ error: validationError });
+    }
+
     const { id } = req.params;
 
     const updated = await updateRecipeService(id, req.body);

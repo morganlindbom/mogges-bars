@@ -28,6 +28,14 @@ export default function Bars() {
 
   useEffect(() => {
     fetchBars();
+
+    const intervalId = globalThis.setInterval(() => {
+      fetchBars();
+    }, 30000);
+
+    return () => {
+      globalThis.clearInterval(intervalId);
+    };
   }, []);
 
   if (loading) {

@@ -1,5 +1,7 @@
 // filename: backend/src/middleware/auth.middleware.js
 
+import jwt from "jsonwebtoken";
+
 export function verifyToken(req, res, next) {
     /* Verify token middleware.
     
@@ -21,8 +23,11 @@ export function verifyToken(req, res, next) {
             return res.status(401).json({ error: "No token" });
         }
 
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
         req.user = {
-            email: "mogge@mogge.se"
+            userId: decoded.userId,
+            email: decoded.email
         };
 
         next();

@@ -2,6 +2,39 @@
 
 import Ingredient from "#models/ingredient.model";
 
+function validateIngredientInput(body) {
+  const {
+    name,
+    calories,
+    carbs,
+    fat,
+    protein,
+    density,
+    pricePer1000g,
+  } = body;
+
+  if (!name || typeof name !== "string" || !name.trim()) {
+    return "Field 'name' is required.";
+  }
+
+  const numericFields = {
+    calories,
+    carbs,
+    fat,
+    protein,
+    density,
+    pricePer1000g,
+  };
+
+  for (const [field, value] of Object.entries(numericFields)) {
+    if (typeof value !== "number" || Number.isNaN(value) || value < 0) {
+      return `Field '${field}' must be a number >= 0.`;
+    }
+  }
+
+  return null;
+}
+
 /**
  * Get all ingredients.
  *
@@ -49,6 +82,11 @@ export async function getIngredientById(req, res) {
  */
 export async function createIngredient(req, res) {
   try {
+    const validationError = validateIngredientInput(req.body);
+    if (validationError) {
+      return res.status(400).json({ error: validationError });
+    }
+
     const ingredient = await Ingredient.create({
       ...req.body,
 
@@ -73,6 +111,11 @@ export async function createIngredient(req, res) {
 export async function updateIngredient(req, res) {
 
   try {
+    const validationError = validateIngredientInput(req.body);
+    if (validationError) {
+      return res.status(400).json({ error: validationError });
+    }
+
     const updated = await Ingredient.findByIdAndUpdate(
       req.params.id,
       req.body,
