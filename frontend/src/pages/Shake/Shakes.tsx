@@ -31,7 +31,7 @@ export default function Shakes() {
 
     const intervalId = globalThis.setInterval(() => {
       fetchShakes();
-    }, 30000);
+    }, 1000);
 
     return () => {
       globalThis.clearInterval(intervalId);

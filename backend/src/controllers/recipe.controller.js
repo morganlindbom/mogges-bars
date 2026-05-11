@@ -38,12 +38,12 @@ function validateRecipeInput(body) {
 
 /* Get all recipes with optional filter */
 export async function getRecipes(req, res) {
-/* Get recipes.
-
-   Detailed explanation:
-   - Reads query params
-   - Passes filter to service
-*/
+  /* Get recipes.
+  
+     Detailed explanation:
+     - Reads query params
+     - Passes filter to service
+  */
 
   try {
     const { type } = req.query;
@@ -60,12 +60,12 @@ export async function getRecipes(req, res) {
 
 /* Get recipe by ID */
 export async function getRecipeById(req, res) {
-/* Get recipe by ID.
-
-   Detailed explanation:
-   - Fetches one recipe
-   - Returns 404 if not found
-*/
+  /* Get recipe by ID.
+  
+     Detailed explanation:
+     - Fetches one recipe
+     - Returns 404 if not found
+  */
 
   try {
     const { id } = req.params;
@@ -86,12 +86,12 @@ export async function getRecipeById(req, res) {
 
 /* Create recipe */
 export async function createRecipe(req, res) {
-/* Create recipe.
-
-   Detailed explanation:
-   - Uses authenticated user
-   - Delegates to service
-*/
+  /* Create recipe.
+  
+     Detailed explanation:
+     - Uses authenticated user
+     - Delegates to service
+  */
 
   try {
     const validationError = validateRecipeInput(req.body);
@@ -113,13 +113,13 @@ export async function createRecipe(req, res) {
 
 /* Update recipe */
 export async function updateRecipe(req, res) {
-/* Update recipe.
-
-   Detailed explanation:
-   - Updates recipe by ID
-   - Uses service layer
-   - Returns updated document
-*/
+  /* Update recipe.
+  
+     Detailed explanation:
+     - Updates recipe by ID
+     - Uses service layer
+     - Returns updated document
+  */
 
   try {
     const validationError = validateRecipeInput(req.body);
@@ -145,12 +145,12 @@ export async function updateRecipe(req, res) {
 
 /* Delete recipe */
 export async function deleteRecipe(req, res) {
-/* Delete recipe.
-
-   Detailed explanation:
-   - Deletes recipe by ID
-   - Returns confirmation
-*/
+  /* Delete recipe.
+  
+     Detailed explanation:
+     - Deletes recipe by ID
+     - Returns confirmation
+  */
 
   try {
     const { id } = req.params;

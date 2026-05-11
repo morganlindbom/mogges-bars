@@ -31,7 +31,7 @@ export default function Bars() {
 
     const intervalId = globalThis.setInterval(() => {
       fetchBars();
-    }, 30000);
+    }, 1000);
 
     return () => {
       globalThis.clearInterval(intervalId);
